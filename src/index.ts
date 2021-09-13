@@ -1,1 +1,3 @@
-import { Client } from 'discord.js/'
+import { AnonimasuBot } from 'client/anonimasu-bot';
+
+new AnonimasuBot().init();

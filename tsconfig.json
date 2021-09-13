@@ -2,17 +2,17 @@
     "compilerOptions": {
         "lib": ["ESNext"],
         "baseUrl": "src",
+        "outDir": "dist",
         "paths": {
             "@client/*": ["src/client/*"],
             "@commands/*": ["src/commands/*"],
             "@enums/*": ["src/enums/*"],
             "@events/*": ["src/events/*"],
-            "@interfaces/*": ["src/interfaces/*"]
+            "@interfaces/*": ["src/interfaces/*"],
         },
         "module": "CommonJS",
         "moduleResolution": "node",
         "target": "ESNext",
-        "outDir": "dist",
         "importHelpers": true,
         "sourceMap": true,
         "esModuleInterop": true,
@@ -23,10 +23,6 @@
         "declaration": true,
         "resolveJsonModule": true
     },
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+    "include": ["src"],
+    "exclude": ["node_modules"]
 }

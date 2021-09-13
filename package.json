@@ -4,7 +4,7 @@
   "description": "Music bot for Discord made in Node.JS",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
+    "start": "ts-node-dev -r tsconfig-paths/register ./src/index.ts --respawn --transpile-only --poll ./src/index.ts",
     "build": "tsc"
   },
   "repository": {
@@ -18,13 +18,17 @@
   },
   "homepage": "https://github.com/Arekushi/anonimasu-bot#readme",
   "dependencies": {
+    "consola": "^2.15.3",
     "discord.js": "^13.1.0",
+    "glob": "^7.1.7",
     "mongoose": "^6.0.5",
     "save": "^2.4.0"
   },
   "devDependencies": {
     "ts-node": "^10.2.1",
     "ts-node-dev": "^1.1.8",
+    "tsc-alias": "^1.3.9",
+    "tsconfig-paths": "^3.11.0",
     "typescript": "^4.4.3"
   }
 }

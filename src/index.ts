@@ -1,3 +1,4 @@
 import { AnonimasuBot } from 'client/anonimasu-bot';
 
-new AnonimasuBot().init();
+const anonimasu = new AnonimasuBot();
+anonimasu.init();

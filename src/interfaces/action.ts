@@ -1,6 +1,9 @@
-import { Bot } from 'client/abstract-bot';
-import { Message } from 'discord.js';
+import { Message, Client } from 'discord.js';
 
-export interface Action<T> {
-    (client: Bot, message?: Message, args?: T): Promise<any>
+export interface ActionCommand {
+    (client: Client, message: Message, args: string[]): Promise<any>
+}
+
+export interface ActionEvent {
+    (client: Client, ...args: any[]): Promise<any>
 }

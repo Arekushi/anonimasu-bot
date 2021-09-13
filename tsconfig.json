@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "lib": ["ESNext"],
+        "baseUrl": "src",
+        "paths": {
+            "@client/*": ["src/client/*"],
+            "@commands/*": ["src/commands/*"],
+            "@enums/*": ["src/enums/*"],
+            "@events/*": ["src/events/*"],
+            "@interfaces/*": ["src/interfaces/*"]
+        },
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "target": "ESNext",
+        "outDir": "dist",
+        "importHelpers": true,
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "declaration": true,
+        "resolveJsonModule": true
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

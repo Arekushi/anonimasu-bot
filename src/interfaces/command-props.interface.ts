@@ -1,7 +1,7 @@
-import { Message, Client } from 'discord.js';
+import { Message } from 'discord.js';
 import { Category } from 'enums/category.enum';
 
-export interface ICommand {
+export interface CommandProps {
     name: string,
     category: Category,
     cooldownReply?: number;

@@ -1,12 +1,12 @@
 import { ValidUseCommandAspect } from 'aspects/valid-use-command.aspect';
 import { Bot } from 'client/abstract-bot';
-import { ICommand } from 'interfaces/command.interface';
+import { CommandProps } from 'interfaces/command-props.interface';
 import { Message, MessageEmbed, MessageOptions, MessagePayload } from 'discord.js';
 import { Category } from 'enums/category.enum';
 import { UseAspect, Advice } from 'ts-aspect'
 
 
-export abstract class Command implements ICommand {
+export abstract class Command {
     name: string;
     client: Bot;
     category: Category;
@@ -17,7 +17,7 @@ export abstract class Command implements ICommand {
     cooldownToUse: number;
     cooldownUsers: Set<string>;
 
-    constructor(client: Bot, options?: ICommand) {
+    constructor(client: Bot, options?: CommandProps) {
         this.client = client;
         this.name = options?.name;
         this.category = options?.category;

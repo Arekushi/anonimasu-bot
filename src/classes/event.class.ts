@@ -1,10 +1,10 @@
-import { IEvent } from 'interfaces/event.interface';
+import { EventProps } from 'interfaces/event-props.interface';
 import { Bot } from 'client/abstract-bot';
 
 export abstract class Event {
     name: string;
 
-    constructor(options?: IEvent) {
+    constructor(options?: EventProps) {
         this.name = options?.name;
     }
 

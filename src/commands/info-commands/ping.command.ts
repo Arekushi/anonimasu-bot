@@ -7,7 +7,7 @@ export class Ping extends Command {
         super(client, {
             name: 'ping',
             category: Category.MESSAGE,
-            cooldownReply: 100,
+            cooldownReply: 0,
             cooldownToUse: 10000,
             aliases: ['pg']
         });

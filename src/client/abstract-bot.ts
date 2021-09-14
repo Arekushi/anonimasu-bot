@@ -58,8 +58,8 @@ export abstract class Bot extends Client {
         const commandsFiles = await getFiles('commands');
         const eventsFiles = await getFiles('events');
 
-        [commandsFiles, eventsFiles].forEach(e => {
-            e.forEach(async (value: string) => {
+        [commandsFiles, eventsFiles].forEach(files => {
+            files.forEach(async (value: string) => {
                 const imported = (await import(value));
                 const instance = new imported[Object.keys(imported)[0]](this);
 

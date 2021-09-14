@@ -22,7 +22,8 @@
     "discord.js": "^13.1.0",
     "glob": "^7.1.7",
     "mongoose": "^6.0.5",
-    "save": "^2.4.0"
+    "save": "^2.4.0",
+    "ts-aspect": "^2.1.6"
   },
   "devDependencies": {
     "ts-node": "^10.2.1",

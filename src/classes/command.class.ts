@@ -1,7 +1,10 @@
+import { ValidUseCommandAspect } from 'aspects/valid-use-command.aspect';
 import { Bot } from 'client/abstract-bot';
 import { ICommand } from 'interfaces/command.interface';
 import { Message, MessageEmbed, MessageOptions, MessagePayload } from 'discord.js';
 import { Category } from 'enums/category.enum';
+import { UseAspect, Advice } from 'ts-aspect'
+
 
 export abstract class Command implements ICommand {
     name: string;
@@ -28,7 +31,8 @@ export abstract class Command implements ICommand {
 
     protected abstract action(client: Bot, args: string[]): Promise<void>;
 
-    async run(client: Bot, message: Message, args: string[]): Promise<void> {
+    @UseAspect(Advice.Before, ValidUseCommandAspect)
+    async run(client: Bot, args: string[]): Promise<void> {
         setTimeout(() => {
             this
                 .action(client, args)
@@ -59,4 +63,3 @@ export abstract class Command implements ICommand {
         }, this.cooldownToUse);
     }
 }
-

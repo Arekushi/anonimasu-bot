@@ -1,4 +1,3 @@
-import { isValidCommand } from 'utils/validations.utils';
 import { Message } from 'discord.js';
 import { isValidMessage } from 'utils/validations.utils';
 import { getMessageArgs } from 'utils/string.utils';
@@ -13,19 +12,12 @@ export class MessageEvent extends Event {
     }
 
     async action(client: Bot, message: Message): Promise<void> {
-        const prefix = client.config.prefix;
-
-        if (isValidMessage(message, prefix)) {
-            const args = getMessageArgs(message, prefix);
+        if (isValidMessage(message, client)) {
+            const args = getMessageArgs(message, client.config.prefix);
             const command = client.getCommand(args.shift());
 
             command.setMessage(message);
-
-            if (isValidCommand(command)) {
-                command.run(client, message, args);
-            } else {
-                await command.respond("Espera sua vez!")
-            }
+            command.run(client, args);
         }
     }
 }

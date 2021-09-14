@@ -10,7 +10,8 @@
             "@events/*": ["src/events/*"],
             "@interfaces/*": ["src/interfaces/*"],
             "@classes/*": ["src/classes/*"],
-            "@utils/*": ["src/utils"]
+            "@utils/*": ["src/utils/*"],
+            "@aspects/*": ["src/aspects/*"]
         },
         "module": "CommonJS",
         "moduleResolution": "node",

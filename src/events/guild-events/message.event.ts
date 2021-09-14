@@ -1,38 +1,31 @@
-import { Bot } from 'client/abstract-bot';
+import { isValidCommand } from 'utils/validations.utils';
 import { Message } from 'discord.js';
-import { Event } from 'interfaces/event';
+import { isValidMessage } from 'utils/validations.utils';
+import { getMessageArgs } from 'utils/string.utils';
+import { Bot } from 'client/abstract-bot';
+import { Event } from 'classes/event.class';
 
-let prefix = '--'
+export class MessageEvent extends Event {
+    constructor() {
+        super({
+            name: 'message'
+        });
+    }
 
-export const event: Event = {
-    name: 'message',
-    action: async (client: Bot, message: Message) => {
-        prefix ??= client.config.prefix;
+    async action(client: Bot, message: Message): Promise<void> {
+        const prefix = client.config.prefix;
 
-        if (isValidMessage(message)) {
-            const args = getArgs(message.content);
-            const command = client.commands.get(args.shift());
+        if (isValidMessage(message, prefix)) {
+            const args = getMessageArgs(message, prefix);
+            const command = client.getCommand(args.shift());
 
-            if (command) {
-                command.action(client, message, args)
-                    .catch((error: any) => {
-                        message.channel.send({
-                            embeds: [client.embed({ description: `Error: ${error}` }, message)]
-                        })
-                })
+            command.setMessage(message);
+
+            if (isValidCommand(command)) {
+                command.run(client, message, args);
+            } else {
+                await command.respond("Espera sua vez!")
             }
         }
     }
-}
-
-const isValidMessage = (message: Message): boolean => {
-    const isValidPrefix = message.content.toLocaleLowerCase().startsWith(prefix);
-    const isBot = message.author.bot;
-    const isValidGuid = !!message.guild;
-
-    return isValidPrefix && !isBot && isValidGuid;
-}
-
-const getArgs = (value: string): string[] => {
-    return value.slice(prefix.length).trim().split(/ +/g);
 }

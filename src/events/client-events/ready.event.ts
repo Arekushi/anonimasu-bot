@@ -1,9 +1,14 @@
 import { Bot } from 'client/abstract-bot';
-import { Event } from 'interfaces/event';
+import { Event } from 'classes/event.class';
 
-export const event: Event = {
-    name: 'ready',
-    action: async (client: Bot) => {
+export class Ready extends Event {
+    constructor() {
+        super({
+            name: 'ready'
+        });
+    }
+
+    async action(client: Bot): Promise<void> {
         client.logger.success(`${client.user.tag} is online!`)
     }
-};
+}

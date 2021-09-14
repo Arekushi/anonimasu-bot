@@ -9,6 +9,8 @@
             "@enums/*": ["src/enums/*"],
             "@events/*": ["src/events/*"],
             "@interfaces/*": ["src/interfaces/*"],
+            "@classes/*": ["src/classes/*"],
+            "@utils/*": ["src/utils"]
         },
         "module": "CommonJS",
         "moduleResolution": "node",

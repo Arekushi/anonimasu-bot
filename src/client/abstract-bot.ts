@@ -1,21 +1,32 @@
-import { Message, MessageEmbed, Intents } from 'discord.js';
-import { Config } from 'interfaces/config';
-import { Event } from 'interfaces/event';
-import { Command } from 'interfaces/command';
-import { Client, Collection, MessageEmbedOptions } from 'discord.js';
-import { promisify } from "util"
+import { Event } from 'classes/event.class';
+import { Command } from 'classes/command.class';
+import { getFiles } from 'utils/string.utils';
+import { Intents, Client, Collection } from 'discord.js';
+import { Config } from 'interfaces/config.interface';
 import ConfigJson from '../config.json';
-import consola from 'consola';
-import glob from "glob"
+import consola, { Consola } from 'consola';
 
-const globPromise = promisify(glob);
 const FLAGS = Intents.FLAGS;
 
 export abstract class Bot extends Client {
-    logger = consola;
-    config: Config = ConfigJson;
-    commands: Collection<string, Command> = new Collection();
-    events: Collection<string, Event> = new Collection();
+    public logger: Consola = consola;
+    public config: Config = ConfigJson;
+
+    private _commands: Collection<string, Command> = new Collection();
+    private _events: Collection<string, Event> = new Collection();
+    private _aliases: Collection<string, string> = new Collection();
+
+    get commands() {
+        return this._commands;
+    }
+
+    get events() {
+        return this._events;
+    }
+
+    get aliases() {
+        return this._aliases;
+    }
 
     constructor() {
         super({
@@ -35,36 +46,31 @@ export abstract class Bot extends Client {
     public async init(): Promise<void> {
         this.login(this.config.token);
 
-        await this.setupCommands();
-        await this.setupEvents();
+        await this.setup();
     }
 
-    public embed(options: MessageEmbedOptions, message: Message): MessageEmbed {
-        return new MessageEmbed({ ...options });
+    public getCommand(name: string): Command {
+        return this._commands.get(name)
+            || this._commands.get(this._aliases.get(name));
     }
 
-    private async setupCommands(): Promise<void> {
-        const commandsFiles = await this.getFiles('commands');
+    private async setup(): Promise<void> {
+        const commandsFiles = await getFiles('commands');
+        const eventsFiles = await getFiles('events');
 
-        commandsFiles.forEach(async (value: string) => {
-            const command: Command = (await import(value)).command;
+        [commandsFiles, eventsFiles].forEach(e => {
+            e.forEach(async (value: string) => {
+                const imported = (await import(value));
+                const instance = new imported[Object.keys(imported)[0]](this);
 
-            this.commands.set(command.name, command);
+                if (instance instanceof Command) {
+                    this._commands.set(instance.name, instance);
+                    instance.aliases.forEach(aliase => this._aliases.set(aliase, instance.name));
+                } else {
+                    this._events.set(instance.name, instance);
+                    this.on(instance.name, instance.action.bind(null, this));
+                }
+            });
         });
-    }
-
-    private async setupEvents(): Promise<void> {
-        const eventsFiles = await this.getFiles('events');
-
-        eventsFiles.forEach(async (value: string) => {
-            const event: Event = (await import(value)).event;
-            
-            this.events.set(event.name, event);
-            this.on(event.name, event.action.bind(null, this));
-        });
-    }
-
-    private async getFiles(thing: string): Promise<string[]> {
-        return await globPromise(`${__dirname}/../${thing}/**/*{.ts,.js}`);
     }
 }

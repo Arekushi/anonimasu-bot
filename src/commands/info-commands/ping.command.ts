@@ -1,16 +1,19 @@
+import { Command } from 'classes/command.class';
 import { Bot } from 'client/abstract-bot';
-import { Message } from 'discord.js';
-import { Command } from 'interfaces/command';
+import { Category } from 'enums/category.enum';
 
-export const command: Command = {
-    name: 'ping',
-    action: async (client: Bot, message: Message) => {
-        await message.channel.send({
-            embeds: [
-                client.embed({
-                    description: `Pong`
-                }, message)
-            ]
+export class Ping extends Command {
+    constructor(client: Bot) {
+        super(client, {
+            name: 'ping',
+            category: Category.MESSAGE,
+            cooldownReply: 100,
+            cooldownToUse: 10000,
+            aliases: ['pg']
         });
+    }
+
+    async action(client: Bot, args: string[]): Promise<void> {
+        await this.respond("Pong")
     }
 }

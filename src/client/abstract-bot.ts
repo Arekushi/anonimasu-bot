@@ -1,6 +1,7 @@
+import { getPropertyByIndex } from 'utils/object.util';
 import { Event } from 'classes/event.class';
 import { Command } from 'classes/command.class';
-import { getFiles } from 'utils/string.utils';
+import { getFiles } from 'utils/string.util';
 import { Intents, Client, Collection } from 'discord.js';
 import { Config } from 'interfaces/config.interface';
 import ConfigJson from '../config.json';
@@ -60,8 +61,8 @@ export abstract class Bot extends Client {
 
         [commandsFiles, eventsFiles].forEach(files => {
             files.forEach(async (value: string) => {
-                const imported = (await import(value));
-                const instance = new imported[Object.keys(imported)[0]](this);
+                const request = getPropertyByIndex(await import(value));
+                const instance = new request(this);
 
                 if (instance instanceof Command) {
                     this._commands.set(instance.name, instance);

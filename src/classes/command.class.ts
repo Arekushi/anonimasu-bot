@@ -1,9 +1,10 @@
-import { ValidUseCommandAspect } from 'aspects/valid-use-command.aspect';
+import { LogCommandAspect } from 'aspects/log-command.aspect';
+import { CheckCommandUsageAspect } from 'aspects/check-command-usage.aspect';
 import { Bot } from 'client/abstract-bot';
 import { CommandProps } from 'interfaces/command-props.interface';
-import { Message, MessageEmbed, MessageOptions, MessagePayload } from 'discord.js';
+import { Message, MessageOptions, MessagePayload } from 'discord.js';
 import { Category } from 'enums/category.enum';
-import { UseAspect, Advice } from 'ts-aspect'
+import { UseAspect, Advice } from 'ts-aspect';
 
 
 export abstract class Command {
@@ -29,29 +30,19 @@ export abstract class Command {
         this.cooldownUsers = new Set();
     }
 
-    protected abstract action(client: Bot, args: string[]): Promise<void>;
+    async respond(message: string | MessagePayload | MessageOptions): Promise<Message> {
+        return await this.message.channel.send(message);
+    }
 
-    @UseAspect(Advice.Before, ValidUseCommandAspect)
-    async run(client: Bot, args: string[]): Promise<void> {
-        setTimeout(() => {
-            this
-                .action(client, args)
-                .catch((error: any) => {
-                    this.message.channel.send({
-                        embeds: [new MessageEmbed({ description: `Error: ${error}` })]
-                    });
-        })}, this.cooldownReply);
-
-        if (this.cooldownToUse > 0) {
-            this.startCooldown();
+    async tryRun(client: Bot, args: string[]): Promise<void> {
+        try {
+            await this.run(client, args);
+        } catch(e) {
+            this.respond(e.msg);
         }
     }
 
-    async respond(message: string | MessagePayload | MessageOptions) {
-        await this.message.channel.send(message);
-    }
-
-    setMessage(message: Message) {
+    setMessage(message: Message): void {
         this.message = message;
     }
 
@@ -61,5 +52,20 @@ export abstract class Command {
         setTimeout(() => {
             this.cooldownUsers.delete(this.message.author.id);
         }, this.cooldownToUse);
+    }
+
+    protected abstract action(client: Bot, args: string[]): Promise<void>;
+
+    @UseAspect(Advice.Before, CheckCommandUsageAspect)
+    @UseAspect(Advice.Before, LogCommandAspect)
+    async run(client: Bot, args: string[]): Promise<void> {
+        setTimeout(() => {
+            this.action(client, args)
+                .then(() => {
+                    if (this.cooldownToUse > 0) {
+                        this.startCooldown();
+                    }
+                })
+        }, this.cooldownReply)
     }
 }

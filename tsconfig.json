@@ -11,7 +11,8 @@
             "@interfaces/*": ["src/interfaces/*"],
             "@classes/*": ["src/classes/*"],
             "@utils/*": ["src/utils/*"],
-            "@aspects/*": ["src/aspects/*"]
+            "@aspects/*": ["src/aspects/*"],
+            "@exceptions/*": ["src/exceptions/*"]
         },
         "module": "CommonJS",
         "moduleResolution": "node",

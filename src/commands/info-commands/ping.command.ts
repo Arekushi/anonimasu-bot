@@ -9,11 +9,11 @@ export class Ping extends Command {
             category: Category.MESSAGE,
             cooldownReply: 0,
             cooldownToUse: 10000,
-            aliases: ['pg']
+            aliases: ['pg', 'PG']
         });
     }
 
     async action(client: Bot, args: string[]): Promise<void> {
-        await this.respond("Pong")
+        await this.respond("Pong");
     }
 }

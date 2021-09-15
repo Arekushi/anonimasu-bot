@@ -1,5 +1,5 @@
 import { EventProps } from 'interfaces/event-props.interface';
-import { Bot } from 'client/abstract-bot';
+import { Bot } from 'classes/bot.class';
 
 export abstract class Event {
     name: string;

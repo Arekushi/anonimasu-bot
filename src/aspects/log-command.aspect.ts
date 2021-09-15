@@ -1,4 +1,4 @@
-import { Command } from 'classes/command.class';
+import { Command } from 'classes/abstracts/command.class';
 import { Aspect } from 'ts-aspect';
 
 export class LogCommandAspect implements Aspect {

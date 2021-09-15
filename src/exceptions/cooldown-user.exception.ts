@@ -1,7 +1,7 @@
-import { Command } from 'classes/command.class';
-import { BaseException } from "./base.exception";
+import { Exception } from "classes/exception.class";
+import { Command } from "classes/command.class";
 
-export class CooldownException extends BaseException {
+export class CooldownException extends Exception {
     constructor(response: Command) {
         super(
             response,

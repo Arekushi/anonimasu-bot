@@ -1,9 +1,9 @@
 import { getPropertyByIndex } from 'utils/object.util';
-import { Event } from 'classes/event.class';
-import { Command } from 'classes/command.class';
 import { getFiles } from 'utils/string.util';
 import { Intents, Client, Collection } from 'discord.js';
 import { Config } from 'interfaces/config.interface';
+import { Command } from 'classes/command.class';
+import { Event } from 'classes/event.class';
 import ConfigJson from '../config.json';
 import consola, { Consola } from 'consola';
 

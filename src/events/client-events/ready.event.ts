@@ -1,5 +1,5 @@
-import { Bot } from 'client/abstract-bot';
 import { Event } from 'classes/event.class';
+import { Bot } from 'classes/bot.class';
 
 export class Ready extends Event {
     constructor() {

@@ -1,5 +1,6 @@
 node_modules
 dist
 .env
+.vscode
 src/config.json
 package-lock.json

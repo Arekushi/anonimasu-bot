@@ -1,6 +1,6 @@
 import { MessageOptions } from 'discord.js';
 
-export abstract class BaseException extends Error {
+export abstract class Exception extends Error {
     response: any;
     msg?: MessageOptions;
 

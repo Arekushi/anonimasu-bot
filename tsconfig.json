@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "lib": ["ESNext"],
+        "lib": ["es2018"],
         "baseUrl": "src",
         "outDir": "dist",
         "paths": {
@@ -9,14 +9,14 @@
             "@enums/*": ["src/enums/*"],
             "@events/*": ["src/events/*"],
             "@interfaces/*": ["src/interfaces/*"],
-            "@classes/*": ["src/classes/*"],
             "@utils/*": ["src/utils/*"],
             "@aspects/*": ["src/aspects/*"],
-            "@exceptions/*": ["src/exceptions/*"]
+            "@exceptions/*": ["src/exceptions/*"],
+            "@classes/*": ["src/classes/*"],
         },
-        "module": "CommonJS",
+        "module": "es2020",
         "moduleResolution": "node",
-        "target": "ESNext",
+        "target": "es2015",
         "importHelpers": true,
         "sourceMap": true,
         "esModuleInterop": true,

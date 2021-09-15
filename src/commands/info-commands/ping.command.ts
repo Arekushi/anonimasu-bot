@@ -1,5 +1,5 @@
 import { Command } from 'classes/command.class';
-import { Bot } from 'client/abstract-bot';
+import { Bot } from 'classes/bot.class';
 import { Category } from 'enums/category.enum';
 
 export class Ping extends Command {

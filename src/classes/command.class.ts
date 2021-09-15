@@ -1,11 +1,10 @@
 import { LogCommandAspect } from 'aspects/log-command.aspect';
 import { CheckCommandUsageAspect } from 'aspects/check-command-usage.aspect';
-import { Bot } from 'client/abstract-bot';
+import { Bot } from 'classes/bot.class';
 import { CommandProps } from 'interfaces/command-props.interface';
 import { Message, MessageOptions, MessagePayload } from 'discord.js';
 import { Category } from 'enums/category.enum';
 import { UseAspect, Advice } from 'ts-aspect';
-
 
 export abstract class Command {
     name: string;

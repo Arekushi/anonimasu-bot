@@ -1,4 +1,4 @@
-import { Bot } from 'client/abstract-bot';
+import { Bot } from 'classes/bot.class';
 import { Message } from 'discord.js';
 
 export const isValidMessage = (message: Message, client: Bot): boolean => {

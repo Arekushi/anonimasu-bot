@@ -1,4 +1,3 @@
-import { Exception } from 'classes/exception.class';
 import { LogCommandAspect } from 'aspects/log-command.aspect';
 import { CheckCommandUsageAspect } from 'aspects/check-command-usage.aspect';
 import { Bot } from 'classes/bot.class';
@@ -32,18 +31,6 @@ export abstract class Command {
 
     async respond(message: string | MessagePayload | MessageOptions): Promise<Message> {
         return await this.message.channel.send(message);
-    }
-
-    async tryRun(client: Bot, args: string[]): Promise<void> {
-        try {
-            await this.run(client, args);
-        } catch(e) {
-            if (e instanceof Exception) {
-                await e.action();
-            } else {
-                console.log(e);
-            }
-        }
     }
 
     setMessage(message: Message): void {

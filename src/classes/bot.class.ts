@@ -69,7 +69,7 @@ export abstract class Bot extends Client {
                     instance.aliases.forEach(aliase => this._aliases.set(aliase, instance.name));
                 } else {
                     this._events.set(instance.name, instance);
-                    this.on(instance.name, instance.action.bind(null, this));
+                    this.on(instance.name, instance.run.bind(instance, this));
                 }
             });
         });

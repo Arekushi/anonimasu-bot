@@ -12,12 +12,12 @@ export class MessageEvent extends Event {
     }
 
     async action(client: Bot, message: Message): Promise<void> {
-        if (isValidMessage(message, client)) {
+        if (isValidMessage(client, message)) {
             const args = getMessageArgs(message, client.config.prefix);
             const command = client.getCommand(args.shift());
 
             command.setMessage(message);
-            command.tryRun(client, args);
+            command.run(client, args);
         }
     }
 }

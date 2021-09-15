@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "lib": ["es2018"],
         "baseUrl": "src",
         "outDir": "dist",
         "paths": {
@@ -9,14 +8,17 @@
             "@enums/*": ["src/enums/*"],
             "@events/*": ["src/events/*"],
             "@interfaces/*": ["src/interfaces/*"],
+            "@classes/*": ["src/classes/*"],
             "@utils/*": ["src/utils/*"],
             "@aspects/*": ["src/aspects/*"],
-            "@exceptions/*": ["src/exceptions/*"],
-            "@classes/*": ["src/classes/*"],
+            "@exceptions/*": ["src/exceptions/*"]
         },
-        "module": "es2020",
+        "plugins": [
+            { "name": "typescript-tslint-plugin" }
+        ],
+        "module": "CommonJS",
         "moduleResolution": "node",
-        "target": "es2015",
+        "target": "ESNext",
         "importHelpers": true,
         "sourceMap": true,
         "esModuleInterop": true,
@@ -27,6 +29,7 @@
         "declaration": true,
         "resolveJsonModule": true
     },
+    "lib": ["ESNext"],
     "include": ["src"],
     "exclude": ["node_modules"]
 }

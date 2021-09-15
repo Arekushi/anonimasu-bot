@@ -1,12 +1,7 @@
-import { MessageOptions } from 'discord.js';
-
 export abstract class Exception extends Error {
-    response: any;
-    msg?: MessageOptions;
-
-    constructor(response: any, msg?: MessageOptions) {
+    constructor() {
         super();
-        this.response = response;
-        this.msg = msg;
     }
+
+    abstract action(): Promise<void>;
 }

@@ -17,7 +17,7 @@ export class MessageEvent extends Event {
             const command = client.getCommand(args.shift());
 
             command.setMessage(message);
-            command.run(client, args);
+            command.tryRun(client, args);
         }
     }
 }

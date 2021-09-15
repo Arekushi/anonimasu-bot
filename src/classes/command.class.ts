@@ -1,3 +1,4 @@
+import { Exception } from 'classes/exception.class';
 import { LogCommandAspect } from 'aspects/log-command.aspect';
 import { CheckCommandUsageAspect } from 'aspects/check-command-usage.aspect';
 import { Bot } from 'classes/bot.class';
@@ -37,7 +38,11 @@ export abstract class Command {
         try {
             await this.run(client, args);
         } catch(e) {
-            this.respond(e.msg);
+            if (e instanceof Exception) {
+                await e.action();
+            } else {
+                console.log(e);
+            }
         }
     }
 

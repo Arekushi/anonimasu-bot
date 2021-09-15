@@ -1,12 +1,13 @@
-import { Command } from 'classes/abstracts/command.class';
+import { Command } from 'classes/command.class';
 import { Aspect } from 'ts-aspect';
 
 export class LogCommandAspect implements Aspect {
     execute(command: Command): void {
         const username = command.message.author.username;
+        const logger = command.client.logger;
         const date = new Date().toTimeString();
 
-        console.log(
+        logger.log(
             `O usuário [${username}] usou o comando [${command.name}] - ${date}`
         );
     }

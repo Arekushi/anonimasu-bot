@@ -9,7 +9,7 @@ export class Ping extends Command {
             category: Category.MESSAGE,
             cooldownReply: 0,
             cooldownToUse: 10000,
-            aliases: ['pg', 'PG']
+            aliases: ['pg']
         });
     }
 

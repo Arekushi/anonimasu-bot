@@ -3,5 +3,5 @@ export abstract class Exception extends Error {
         super();
     }
 
-    abstract action(): Promise<void>;
+    abstract action(...args: any[]): Promise<void>;
 }

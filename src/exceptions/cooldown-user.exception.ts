@@ -1,3 +1,5 @@
+import { LogExceptionAspect } from 'aspects/log-exception.aspect';
+import { UseAspect, Advice } from 'ts-aspect';
 import { Exception } from "classes/exception.class";
 import { Command } from "classes/command.class";
 
@@ -8,12 +10,12 @@ export class CooldownException extends Exception {
         super();
 
         this.command = command;
+        this.message = `O usuário ${this.command.message.author.username} ` + 
+            `não pode usar o comando ${this.command.name} por enquanto. Aguarde.`;
     }
 
+    @UseAspect(Advice.Before, LogExceptionAspect)
     async action(): Promise<void> {
-        const content = `O usuário ${this.command.message.author.username} ` + 
-            `não pode usar o comando ${this.command.name} por enquanto. Aguarde.`;
-
-        await this.command.message.reply({ content });
+        await this.command.message.reply({ content: this.message });
     }
 }

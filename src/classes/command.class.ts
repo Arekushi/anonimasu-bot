@@ -48,7 +48,7 @@ export abstract class Command {
     protected abstract action(client: Bot, args: string[]): Promise<void>;
 
     @UseAspect(Advice.Before, CheckCommandUsageAspect)
-    @UseAspect(Advice.Before, LogCommandAspect)
+    @UseAspect(Advice.After, LogCommandAspect)
     async run(client: Bot, args: string[]): Promise<void> {
         setTimeout(() => {
             this.action(client, args)

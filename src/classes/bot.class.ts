@@ -5,12 +5,10 @@ import { Config } from 'interfaces/config.interface';
 import { Command } from 'classes/command.class';
 import { Event } from 'classes/event.class';
 import ConfigJson from '../config.json';
-import consola, { Consola } from 'consola';
 
 const FLAGS = Intents.FLAGS;
 
 export abstract class Bot extends Client {
-    public logger: Consola = consola;
     public config: Config = ConfigJson;
 
     private _commands: Collection<string, Command> = new Collection();
@@ -51,8 +49,8 @@ export abstract class Bot extends Client {
     }
 
     public getCommand(name: string): Command {
-        return this._commands.get(name)
-            || this._commands.get(this._aliases.get(name));
+        name = name.toLocaleLowerCase();
+        return this.commands.get(name) || this._commands.get(this.aliases.get(name));
     }
 
     private async setup(): Promise<void> {

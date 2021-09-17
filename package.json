@@ -21,6 +21,7 @@
     "consola": "^2.15.3",
     "discord.js": "^13.1.0",
     "glob": "^7.1.7",
+    "moment": "^2.29.1",
     "mongoose": "^6.0.5",
     "save": "^2.4.0",
     "ts-aspect": "^2.1.6"

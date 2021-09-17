@@ -1,5 +1,5 @@
 import { NullCommandAspect } from 'aspects/null-command.aspect';
-import { ToLowerCaseParametersAspect } from 'aspects/string-parameters.aspect';
+import { ToLowerCaseParametersAspect } from 'aspects/to-lowercase-parameters.aspect';
 import { getPropertyByIndex } from 'utils/object.util';
 import { getFiles } from 'utils/string.util';
 import { Intents, Client, Collection, Message } from 'discord.js';

@@ -2,9 +2,10 @@ import { LogCommandAspect } from 'aspects/log-command.aspect';
 import { CheckCommandUsageAspect } from 'aspects/check-command-usage.aspect';
 import { Bot } from 'classes/bot.class';
 import { CommandProps } from 'interfaces/command-props.interface';
-import { Message, MessageOptions, MessagePayload } from 'discord.js';
+import { Message, MessageOptions, MessagePayload, Collection } from 'discord.js';
 import { Category } from 'enums/category.enum';
 import { UseAspect, Advice } from 'ts-aspect';
+import moment, { Moment } from 'moment';
 
 export abstract class Command {
     name: string;
@@ -15,7 +16,7 @@ export abstract class Command {
     aliases?: string[];
     message?: Message;
     cooldownToUse: number;
-    cooldownUsers: Set<string>;
+    cooldownUsers: Collection<string, Moment>;
 
     constructor(client: Bot, options?: CommandProps) {
         this.client = client;
@@ -26,7 +27,7 @@ export abstract class Command {
         this.aliases = options?.aliases;
         this.message = options?.message;
         this.cooldownToUse = options?.cooldownToUse ?? 0;
-        this.cooldownUsers = new Set();
+        this.cooldownUsers = new Collection();
     }
 
     async respond(message: string | MessagePayload | MessageOptions): Promise<Message> {
@@ -38,11 +39,10 @@ export abstract class Command {
     }
 
     startCooldown(): void {
-        this.cooldownUsers.add(this.message.author.id);
-
-        setTimeout(() => {
-            this.cooldownUsers.delete(this.message.author.id);
-        }, this.cooldownToUse);
+        this.cooldownUsers.set(
+            this.message.author.id, 
+            moment().add(this.cooldownToUse, 'milliseconds')
+        );
     }
 
     protected abstract action(client: Bot, args: string[]): Promise<void>;

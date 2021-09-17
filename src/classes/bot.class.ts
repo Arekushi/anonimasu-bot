@@ -17,7 +17,7 @@ export abstract class Bot extends Client {
     private _commands: Collection<string, Command> = new Collection();
     private _events: Collection<string, Event> = new Collection();
     private _aliases: Collection<string, string> = new Collection();
-    private _messages: Message[] = [];
+    private _messages: Collection<string, Message> = new Collection();
 
     get commands() {
         return this._commands;
@@ -58,17 +58,19 @@ export abstract class Bot extends Client {
 
     @UseAspect(Advice.Before, ToLowerCaseParametersAspect)
     @UseAspect(Advice.AfterReturn, NullCommandAspect)
-    public getCommand(name: string): Command {
+    public getCommand(name: string): any {
         return this.commands.get(name) || this.commands.get(this.aliases.get(name));
     }
 
     public getMessageArgs(message: Message): string[] {
-        this.messages.push(message);
-
-        return message.content
+        const args = message.content
             .slice(this.config.prefix.length)
             .trim()
-            .split(/ +/g);
+            .split(/ +/g); 
+
+        this.messages.set(args[0], message);
+
+        return args;
     }
 
     private async setup(): Promise<void> {

@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { Bot } from 'classes/bot.class';
 import { Event } from 'classes/event.class';
 import { UseAspect, Advice } from 'ts-aspect';
+import { Command } from 'classes/command.class';
 
 export class MessageEvent extends Event {
     constructor() {

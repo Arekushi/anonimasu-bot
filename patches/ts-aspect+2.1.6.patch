@@ -1,0 +1,13 @@
+diff --git a/node_modules/ts-aspect/build/proxyFunc.js b/node_modules/ts-aspect/build/proxyFunc.js
+index 105fffa..7145388 100644
+--- a/node_modules/ts-aspect/build/proxyFunc.js
++++ b/node_modules/ts-aspect/build/proxyFunc.js
+@@ -48,7 +48,7 @@ function proxyFunc(target, methodContainer, ...args) {
+     }
+     if (adviceAspectMap.has(advice_enum_1.Advice.AfterReturn)) {
+         (_g = adviceAspectMap.get(advice_enum_1.Advice.AfterReturn)) === null || _g === void 0 ? void 0 : _g.forEach(aspect => {
+-            returnedValue = aspect.execute(target, [returnedValue]);
++            returnedValue = aspect.execute(target, [args, returnedValue]);
+         });
+     }
+     return returnedValue;

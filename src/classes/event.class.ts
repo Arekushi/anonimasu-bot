@@ -1,7 +1,6 @@
-import { Exception } from 'classes/exception.class';
+import { logException } from 'utils/exception.util';
 import { EventProps } from 'interfaces/event-props.interface';
 import { Bot } from 'classes/bot.class';
-import consola from 'consola';
 
 export abstract class Event<T extends Bot> {
     name: string;
@@ -14,11 +13,7 @@ export abstract class Event<T extends Bot> {
         try {
             await this.action(client, ...args);
         } catch (e) {
-            if (e instanceof Exception) {
-                await e.action(client, ...args);
-            } else if (e instanceof Error) {
-                consola.error(e);
-            }
+            await logException(e);
         }
     }
 

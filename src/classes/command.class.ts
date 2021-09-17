@@ -57,6 +57,6 @@ export abstract class Command {
                         this.startCooldown();
                     }
                 })
-        }, this.cooldownReply)
+        }, this.cooldownReply);
     }
 }

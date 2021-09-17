@@ -1,10 +1,13 @@
+import { NullCommandAspect } from 'aspects/null-command.aspect';
+import { ToLowerCaseParametersAspect } from 'aspects/string-parameters.aspect';
 import { getPropertyByIndex } from 'utils/object.util';
 import { getFiles } from 'utils/string.util';
-import { Intents, Client, Collection } from 'discord.js';
+import { Intents, Client, Collection, Message } from 'discord.js';
 import { Config } from 'interfaces/config.interface';
 import { Command } from 'classes/command.class';
 import { Event } from 'classes/event.class';
 import ConfigJson from '../config.json';
+import { UseAspect, Advice } from 'ts-aspect';
 
 const FLAGS = Intents.FLAGS;
 
@@ -14,6 +17,7 @@ export abstract class Bot extends Client {
     private _commands: Collection<string, Command> = new Collection();
     private _events: Collection<string, Event> = new Collection();
     private _aliases: Collection<string, string> = new Collection();
+    private _messages: Message[] = [];
 
     get commands() {
         return this._commands;
@@ -25,6 +29,10 @@ export abstract class Bot extends Client {
 
     get aliases() {
         return this._aliases;
+    }
+
+    get messages() {
+        return this._messages;
     }
 
     constructor() {
@@ -48,9 +56,19 @@ export abstract class Bot extends Client {
         await this.setup();
     }
 
+    @UseAspect(Advice.Before, ToLowerCaseParametersAspect)
+    @UseAspect(Advice.AfterReturn, NullCommandAspect)
     public getCommand(name: string): Command {
-        name = name.toLocaleLowerCase();
-        return this.commands.get(name) || this._commands.get(this.aliases.get(name));
+        return this.commands.get(name) || this.commands.get(this.aliases.get(name));
+    }
+
+    public getMessageArgs(message: Message): string[] {
+        this.messages.push(message);
+
+        return message.content
+            .slice(this.config.prefix.length)
+            .trim()
+            .split(/ +/g);
     }
 
     private async setup(): Promise<void> {
@@ -63,13 +81,14 @@ export abstract class Bot extends Client {
                 const instance = new request(this);
 
                 if (instance instanceof Command) {
-                    this._commands.set(instance.name, instance);
-                    instance.aliases.forEach(aliase => this._aliases.set(aliase, instance.name));
+                    this.commands.set(instance.name, instance);
+                    instance.aliases.forEach(aliase => this.aliases.set(aliase, instance.name));
                 } else {
-                    this._events.set(instance.name, instance);
+                    this.events.set(instance.name, instance);
                     this.on(instance.name, instance.run.bind(instance, this));
                 }
             });
         });
     }
+
 }

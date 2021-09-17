@@ -7,9 +7,9 @@ import { Category } from 'enums/category.enum';
 import { UseAspect, Advice } from 'ts-aspect';
 import moment, { Moment } from 'moment';
 
-export abstract class Command {
+export abstract class Command<T extends Bot> {
     name: string;
-    client: Bot;
+    client: T;
     category: Category;
     cooldownReply?: number;
     description?: string;
@@ -18,7 +18,7 @@ export abstract class Command {
     cooldownToUse: number;
     cooldownUsers: Collection<string, Moment>;
 
-    constructor(client: Bot, options?: CommandProps) {
+    constructor(client: T, options?: CommandProps) {
         this.client = client;
         this.name = options?.name;
         this.category = options?.category;
@@ -45,11 +45,11 @@ export abstract class Command {
         );
     }
 
-    protected abstract action(client: Bot, args: string[]): Promise<void>;
+    protected abstract action(client: T, args: string[]): Promise<void>;
 
     @UseAspect(Advice.Before, CheckCommandUsageAspect)
     @UseAspect(Advice.After, LogCommandAspect)
-    async run(client: Bot, args: string[]): Promise<void> {
+    async run(client: T, args: string[]): Promise<void> {
         setTimeout(() => {
             this.action(client, args)
                 .then(() => {

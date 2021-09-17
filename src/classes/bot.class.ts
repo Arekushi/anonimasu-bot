@@ -14,8 +14,8 @@ const FLAGS = Intents.FLAGS;
 export abstract class Bot extends Client {
     public config: Config = ConfigJson;
 
-    private _commands: Collection<string, Command> = new Collection();
-    private _events: Collection<string, Event> = new Collection();
+    private _commands: Collection<string, Command<Bot>> = new Collection();
+    private _events: Collection<string, Event<Bot>> = new Collection();
     private _aliases: Collection<string, string> = new Collection();
     private _messages: Collection<string, Message> = new Collection();
 
@@ -58,7 +58,7 @@ export abstract class Bot extends Client {
 
     @UseAspect(Advice.Before, ToLowerCaseParametersAspect)
     @UseAspect(Advice.AfterReturn, NullCommandAspect)
-    public getCommand(name: string): any {
+    public getCommand(name: string): Command<Bot> {
         return this.commands.get(name) || this.commands.get(this.aliases.get(name));
     }
 
@@ -66,7 +66,7 @@ export abstract class Bot extends Client {
         const args = message.content
             .slice(this.config.prefix.length)
             .trim()
-            .split(/ +/g); 
+            .split(/ +/g);
 
         this.messages.set(args[0], message);
 

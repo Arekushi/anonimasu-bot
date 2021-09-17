@@ -1,12 +1,13 @@
+import { Bot } from 'classes/bot.class';
 import { LogExceptionAspect } from 'aspects/log-exception.aspect';
 import { UseAspect, Advice } from 'ts-aspect';
 import { Exception } from "classes/exception.class";
 import { Command } from "classes/command.class";
 
 export class CooldownException extends Exception {
-    command: Command;
+    command: Command<Bot>;
 
-    constructor(command: Command) {
+    constructor(command: Command<Bot>) {
         super();
 
         this.command = command;

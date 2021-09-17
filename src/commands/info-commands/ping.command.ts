@@ -1,9 +1,9 @@
+import { AnonimasuBot } from 'client/anonimasu.bot';
 import { Command } from 'classes/command.class';
-import { Bot } from 'classes/bot.class';
 import { Category } from 'enums/category.enum';
 
-export class Ping extends Command {
-    constructor(client: Bot) {
+export class Ping extends Command<AnonimasuBot> {
+    constructor(client: AnonimasuBot) {
         super(client, {
             name: 'ping',
             category: Category.MESSAGE,
@@ -13,7 +13,7 @@ export class Ping extends Command {
         });
     }
 
-    async action(client: Bot, args: string[]): Promise<void> {
+    async action(client: AnonimasuBot, args: string[]): Promise<void> {
         await this.respond("Pong");
     }
 }

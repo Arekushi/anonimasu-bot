@@ -4,7 +4,7 @@ import { Bot } from 'classes/bot.class';
 import { Aspect } from 'ts-aspect';
 
 export class NullCommandAspect implements Aspect {
-    execute(bot: Bot, returned: any[]): Command {
+    execute(bot: Bot, returned: any[]): Command<Bot> {
         const name = returned[0][0];
         const command = returned[1];
     

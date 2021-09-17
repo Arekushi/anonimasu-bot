@@ -1,15 +1,15 @@
+import { AnonimasuBot } from 'client/anonimasu.bot';
 import { Event } from 'classes/event.class';
-import { Bot } from 'classes/bot.class';
 import consola from 'consola';
 
-export class Ready extends Event {
+export class Ready extends Event<AnonimasuBot> {
     constructor() {
         super({
             name: 'ready'
         });
     }
 
-    async action(client: Bot): Promise<void> {
+    async action(client: AnonimasuBot): Promise<void> {
         consola.success(`${client.user.tag} is online!`);
         client.user.setActivity({
             name: '日本語',

@@ -1,11 +1,10 @@
+import { AnonimasuBot } from 'client/anonimasu.bot';
 import { CheckMessageAspect } from 'aspects/check-message.aspect';
 import { Message } from 'discord.js';
-import { Bot } from 'classes/bot.class';
 import { Event } from 'classes/event.class';
 import { UseAspect, Advice } from 'ts-aspect';
-import { Command } from 'classes/command.class';
 
-export class MessageEvent extends Event {
+export class MessageEvent extends Event<AnonimasuBot> {
     constructor() {
         super({
             name: 'message'
@@ -13,7 +12,7 @@ export class MessageEvent extends Event {
     }
 
     @UseAspect(Advice.Before, CheckMessageAspect)
-    async action(client: Bot, message: Message): Promise<void> {
+    async action(client: AnonimasuBot, message: Message): Promise<void> {
         const args = client.getMessageArgs(message);
         const command = client.getCommand(args.shift());
 

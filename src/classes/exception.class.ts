@@ -1,7 +1,8 @@
+import { Bot } from 'classes/bot.class';
 export abstract class Exception extends Error {
     constructor() {
         super();
     }
 
-    abstract action(): Promise<void>;
+    abstract action(client: Bot, ...args: any[]): Promise<void>;
 }

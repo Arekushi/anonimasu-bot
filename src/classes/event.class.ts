@@ -13,7 +13,7 @@ export abstract class Event<T extends Bot> {
         try {
             await this.action(client, ...args);
         } catch (e) {
-            await logException(e);
+            await logException(e, client, ...args);
         }
     }
 

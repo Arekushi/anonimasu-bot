@@ -56,8 +56,11 @@ export abstract class Command<T extends Bot> {
                         this.startCooldown();
                     }
                 })
+                .catch((err) => {
+                    logException(err, client, this.message);
+                })
             } catch (e) {
-                await logException(e);
+                await logException(e, client, this.message);
             }
         }, this.cooldownReply);
     }

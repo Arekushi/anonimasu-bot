@@ -20,7 +20,7 @@ export class CheckPlayCommandUsageAspect implements Aspect {
             );
         }
 
-        if (!args[0].length) {
+        if (!args[1].length) {
             throw new ReplyUserException(
                 command.message, 'Você precisa passar um segundo argumento!'
             );

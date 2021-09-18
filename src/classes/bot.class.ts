@@ -1,5 +1,7 @@
-import { NullCommandAspect } from 'aspects/null-command.aspect';
-import { ToLowerCaseParametersAspect } from 'aspects/to-lowercase-parameters.aspect';
+import { NonExistentCommandException } from 'exceptions/non-existent-command.exception';
+import { NullReturnAspect } from 'aspects/null-return.aspect';
+import { Case } from 'enums/string-case.enum';
+import { ToCaseParametersAspect } from 'aspects/to-case-parameters.aspect';
 import { getPropertyByIndex } from 'utils/object.util';
 import { getFiles } from 'utils/string.util';
 import { Intents, Client, Collection, Message } from 'discord.js';
@@ -14,10 +16,9 @@ const FLAGS = Intents.FLAGS;
 export abstract class Bot extends Client {
     public config: Config = ConfigJson;
 
-    private _commands: Collection<string, Command<Bot>> = new Collection();
-    private _events: Collection<string, Event<Bot>> = new Collection();
-    private _aliases: Collection<string, string> = new Collection();
-    private _messages: Collection<string, Message> = new Collection();
+    private _commands: Collection<string, Command<Bot>>;
+    private _events: Collection<string, Event<Bot>>;
+    private _aliases: Collection<string, string>;
 
     get commands() {
         return this._commands;
@@ -29,10 +30,6 @@ export abstract class Bot extends Client {
 
     get aliases() {
         return this._aliases;
-    }
-
-    get messages() {
-        return this._messages;
     }
 
     constructor() {
@@ -48,6 +45,10 @@ export abstract class Bot extends Client {
                 FLAGS.GUILD_PRESENCES
             ]
         });
+
+        this._commands = new Collection();
+        this._events = new Collection();
+        this._aliases = new Collection();
     }
 
     public async init(): Promise<void> {
@@ -56,8 +57,8 @@ export abstract class Bot extends Client {
         await this.setup();
     }
 
-    @UseAspect(Advice.Before, ToLowerCaseParametersAspect)
-    @UseAspect(Advice.AfterReturn, NullCommandAspect)
+    @UseAspect(Advice.Before, ToCaseParametersAspect, Case.LOWER)
+    @UseAspect(Advice.AfterReturn, NullReturnAspect, new NonExistentCommandException())
     public getCommand(name: string): Command<Bot> {
         return this.commands.get(name) || this.commands.get(this.aliases.get(name));
     }
@@ -67,8 +68,6 @@ export abstract class Bot extends Client {
             .slice(this.config.prefix.length)
             .trim()
             .split(/ +/g);
-
-        this.messages.set(args[0], message);
 
         return args;
     }

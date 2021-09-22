@@ -4,8 +4,10 @@ import { Bot } from 'classes/bot.class';
 import { Aspect } from 'ts-aspect';
 
 export class ToCaseParametersAspect implements Aspect {
+    parameters: any[];
+
     execute(bot: Bot, args: any[]): string[] {
-        const caseArg = args.pop()[0];
+        const caseArg = this.parameters.shift();
 
         const strings = args.filter(e => {
             if (typeof e === 'string') {

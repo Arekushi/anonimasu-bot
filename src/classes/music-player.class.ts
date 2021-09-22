@@ -49,7 +49,7 @@ export class MusicPlayer {
         this.queues.delete(guild);
     }
 
-    public async playSong(guid: string, song: Music): Promise<void> {
+    public async playMusic(guid: string, music: Music): Promise<void> {
         const songQueued = this.queues.get(guid);
         
         // if (!songQueued) {
@@ -58,7 +58,7 @@ export class MusicPlayer {
         //     return;
         // }
 
-        const stream = ytdl(song.url, { filter: 'audioonly' });
+        const stream = ytdl(music.url, { filter: 'audioonly' });
         const audio = createAudioResource(stream, { inputType: StreamType.Arbitrary });
         this.audioPlayer.play(audio);
     }

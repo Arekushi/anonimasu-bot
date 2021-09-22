@@ -21,20 +21,26 @@ export class Play extends Command<AnonimasuBot> {
 
     @UseAspect(Advice.Before, CheckPlayCommandUsageAspect)
     async action(client: AnonimasuBot, args: string[]): Promise<void> {   
-        const music = await this.getMusic(args);
-        const guildId = this.message.guild.id;
-        const hasQueue = client.musicPlayer.hasQueue(guildId)
+        await this.test();
+        // const music = await this.getMusic(args);
+        // const guildId = this.message.guild.id;
+        // const hasQueue = client.musicPlayer.hasQueue(guildId)
 
-        if (!hasQueue) {
-            const connection = await client.joinVoiceChannel(this.message);
-            client.musicPlayer.startQueue(this.message, connection);
-            client.musicPlayer.addMusic(guildId, music);
-            client.musicPlayer.playSong(guildId, music);
-        } else {
-            client.musicPlayer.addMusic(guildId, music);
-        }
+        // if (!hasQueue) {
+        //     const connection = await client.joinVoiceChannel(this.message);
+        //     client.musicPlayer.startQueue(this.message, connection);
+        //     client.musicPlayer.addMusic(guildId, music);
+        //     client.musicPlayer.playMusic(guildId, music);
+        // } else {
+        //     client.musicPlayer.addMusic(guildId, music);
+        // }
 
-        this.message.channel.send(`Tocando a música: ${music.title}`);
+        // this.message.channel.send(`Tocando a música: ${music.title}`);
+    }
+
+    @UseAspect(Advice.AfterReturn, NullReturnAsyncAspect, new NullReturnException('Test'))
+    private async test(): Promise<any> {
+        return null;
     }
 
     private async getMusic(args: string[]): Promise<Music> {

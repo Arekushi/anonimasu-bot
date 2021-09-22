@@ -1,10 +1,22 @@
+diff --git a/node_modules/ts-aspect/build/addAspect.d.ts b/node_modules/ts-aspect/build/addAspect.d.ts
+index 8b9fbad..eb49b3e 100644
+--- a/node_modules/ts-aspect/build/addAspect.d.ts
++++ b/node_modules/ts-aspect/build/addAspect.d.ts
+@@ -1,3 +1,3 @@
+ import { Advice } from './advice.enum';
+ import { Aspect } from './aspect.interface';
+-export declare function addAspect(target: any, methodName: string, advice: Advice, aspect: Aspect): void;
++export declare const addAspect: (target: any, methodName: string, advice: Advice, aspect: Aspect) => void;
 diff --git a/node_modules/ts-aspect/build/addAspect.js b/node_modules/ts-aspect/build/addAspect.js
-index 73a6c41..62c9384 100644
+index 73a6c41..65c7dbf 100644
 --- a/node_modules/ts-aspect/build/addAspect.js
 +++ b/node_modules/ts-aspect/build/addAspect.js
-@@ -5,10 +5,10 @@ const proxyFunc_1 = require("./proxyFunc");
+@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.addAspect = void 0;
+ const proxyFunc_1 = require("./proxyFunc");
  const TsAspectProperty_1 = require("./TsAspectProperty");
- function addAspect(target, methodName, advice, aspect) {
+-function addAspect(target, methodName, advice, aspect) {
++const addAspect = (target, methodName, advice, aspect) => {
      var _a;
 -    let tsAspectProp = TsAspectProperty_1.getTsAspectProp(target);
 +    let tsAspectProp = (0, TsAspectProperty_1.getTsAspectProp)(target);
@@ -15,18 +27,27 @@ index 73a6c41..62c9384 100644
      }
      if (!tsAspectProp[methodName]) {
          const originalMethod = Reflect.get(target, methodName);
-@@ -17,9 +17,9 @@ function addAspect(target, methodName, advice, aspect) {
+@@ -16,10 +16,10 @@ function addAspect(target, methodName, advice, aspect) {
+             originalMethod,
              adviceAspectMap: new Map(),
          };
-         const proxyMethod = function (...args) {
+-        const proxyMethod = function (...args) {
 -            const tsAspectProp = TsAspectProperty_1.getTsAspectProp(target);
++        const proxyMethod = (...args) => {
 +            const tsAspectProp = (0, TsAspectProperty_1.getTsAspectProp)(target);
              if (tsAspectProp) {
 -                return proxyFunc_1.proxyFunc(target, tsAspectProp[methodName], ...args);
-+                return (0, proxyFunc_1.proxyFunc)(target, tsAspectProp[methodName], args);
++                return (0, proxyFunc_1.proxyFunc)(target, tsAspectProp[methodName], ...args);
              }
              return originalMethod(...args);
          };
+@@ -30,5 +30,5 @@ function addAspect(target, methodName, advice, aspect) {
+         adviceAspectMap.set(advice, []);
+     }
+     (_a = adviceAspectMap.get(advice)) === null || _a === void 0 ? void 0 : _a.push(aspect);
+-}
++};
+ exports.addAspect = addAspect;
 diff --git a/node_modules/ts-aspect/build/addAspectToPointcut.js b/node_modules/ts-aspect/build/addAspectToPointcut.js
 index aab90fc..1113cda 100644
 --- a/node_modules/ts-aspect/build/addAspectToPointcut.js
@@ -44,25 +65,25 @@ index aab90fc..1113cda 100644
  }
  exports.addAspectToPointcut = addAspectToPointcut;
 diff --git a/node_modules/ts-aspect/build/aspect.interface.d.ts b/node_modules/ts-aspect/build/aspect.interface.d.ts
-index 67edf63..6e71450 100644
+index 67edf63..ec0454a 100644
 --- a/node_modules/ts-aspect/build/aspect.interface.d.ts
 +++ b/node_modules/ts-aspect/build/aspect.interface.d.ts
 @@ -1,3 +1,4 @@
  export interface Aspect {
-+    args?: any[];
++    parameters?: any[];
      execute(target: any, args: any[]): any;
  }
 diff --git a/node_modules/ts-aspect/build/decorator/UseAspect.d.ts b/node_modules/ts-aspect/build/decorator/UseAspect.d.ts
-index dc94fcf..71fa558 100644
+index dc94fcf..2e8ec78 100644
 --- a/node_modules/ts-aspect/build/decorator/UseAspect.d.ts
 +++ b/node_modules/ts-aspect/build/decorator/UseAspect.d.ts
 @@ -1,3 +1,3 @@
  import { Advice } from '../advice.enum';
  import { Aspect } from '../aspect.interface';
 -export declare function UseAspect(advice: Advice, aspect: Aspect | (new () => Aspect)): MethodDecorator;
-+export declare const UseAspect: (advice: Advice, aspect: Aspect | (new () => Aspect), ...aspectArgs: any[]) => MethodDecorator;
++export declare const UseAspect: (advice: Advice, aspect: Aspect | (new () => Aspect), ...parameters: any[]) => MethodDecorator;
 diff --git a/node_modules/ts-aspect/build/decorator/UseAspect.js b/node_modules/ts-aspect/build/decorator/UseAspect.js
-index dbb801a..05bf364 100644
+index dbb801a..579825e 100644
 --- a/node_modules/ts-aspect/build/decorator/UseAspect.js
 +++ b/node_modules/ts-aspect/build/decorator/UseAspect.js
 @@ -3,13 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
@@ -70,11 +91,10 @@ index dbb801a..05bf364 100644
  const proxyFunc_1 = require("../proxyFunc");
  const TsAspectProperty_1 = require("../TsAspectProperty");
 -function UseAspect(advice, aspect) {
--    return function (target, propertyKey, descriptor) {
++const UseAspect = (advice, aspect, ...parameters) => {
+     return function (target, propertyKey, descriptor) {
 -        var _a, _b;
 -        let tsAspectProp = TsAspectProperty_1.getTsAspectProp(target);
-+const UseAspect = (advice, aspect, ...aspectArgs) => {
-+    return (target, propertyKey, descriptor) => {
 +        var _a;
 +        let tsAspectProp = (0, TsAspectProperty_1.getTsAspectProp)(target);
          if (!tsAspectProp) {
@@ -96,7 +116,7 @@ index dbb801a..05bf364 100644
                  }
                  return originalMethod(...args);
              };
-@@ -30,12 +30,12 @@ function UseAspect(advice, aspect) {
+@@ -30,12 +30,9 @@ function UseAspect(advice, aspect) {
          if (!adviceAspectMap.has(advice)) {
              adviceAspectMap.set(advice, []);
          }
@@ -105,49 +125,46 @@ index dbb801a..05bf364 100644
 -        }
 -        else {
 -            (_b = adviceAspectMap.get(advice)) === null || _b === void 0 ? void 0 : _b.push(aspect);
-+        const aspectObj = typeof aspect === 'function' ?
-+            new aspect() : aspect;
-+        if (aspectArgs === null || aspectArgs === void 0 ? void 0 : aspectArgs.length) {
-+            aspectObj.args = aspectArgs;
-         }
+-        }
++        const aspectObj = typeof aspect === 'function' ? new aspect() : aspect;
++        aspectObj.parameters = parameters !== null && parameters !== void 0 ? parameters : [];
 +        (_a = adviceAspectMap.get(advice)) === null || _a === void 0 ? void 0 : _a.push(aspectObj);
      };
 -}
 +};
  exports.UseAspect = UseAspect;
 diff --git a/node_modules/ts-aspect/build/proxyFunc.d.ts b/node_modules/ts-aspect/build/proxyFunc.d.ts
-index f549a87..7eeb4c8 100644
+index f549a87..675c5f7 100644
 --- a/node_modules/ts-aspect/build/proxyFunc.d.ts
 +++ b/node_modules/ts-aspect/build/proxyFunc.d.ts
 @@ -1,2 +1,2 @@
  import { MethodContainer } from './TsAspectContainer';
 -export declare function proxyFunc(target: any, methodContainer: MethodContainer, ...args: any): any;
-+export declare function proxyFunc(target: any, methodContainer: MethodContainer, ...args: any[]): any;
++export declare const proxyFunc: (target: any, methodContainer: MethodContainer, ...args: any) => any;
 diff --git a/node_modules/ts-aspect/build/proxyFunc.js b/node_modules/ts-aspect/build/proxyFunc.js
-index 105fffa..d89b4f9 100644
+index 105fffa..9d0829f 100644
 --- a/node_modules/ts-aspect/build/proxyFunc.js
 +++ b/node_modules/ts-aspect/build/proxyFunc.js
-@@ -5,24 +5,34 @@ const advice_enum_1 = require("./advice.enum");
- function proxyFunc(target, methodContainer, ...args) {
+@@ -2,22 +2,23 @@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.proxyFunc = void 0;
+ const advice_enum_1 = require("./advice.enum");
+-function proxyFunc(target, methodContainer, ...args) {
++const proxyFunc = (target, methodContainer, ...args) => {
      var _a, _b, _c, _d, _e, _f, _g;
      const { originalMethod, adviceAspectMap } = methodContainer;
-+    let returnedValue;
++    let returnedValue = undefined;
 +    let modifiedArgs = undefined;
      if (adviceAspectMap.has(advice_enum_1.Advice.Before)) {
          (_a = adviceAspectMap.get(advice_enum_1.Advice.Before)) === null || _a === void 0 ? void 0 : _a.forEach(aspect => {
 -            aspect.execute(target, args);
-+            if (aspect.args) {
-+                args.push(aspect.args);
-+            }
 +            modifiedArgs = aspect.execute(target, args);
          });
      }
      if (adviceAspectMap.has(advice_enum_1.Advice.Around)) {
          (_b = adviceAspectMap.get(advice_enum_1.Advice.Around)) === null || _b === void 0 ? void 0 : _b.forEach(aspect => {
-+            if (aspect.args) {
-+                args.push(aspect.args);
-+            }
-             aspect.execute(target, args);
+-            aspect.execute(target, args);
++            modifiedArgs = aspect.execute(target, args);
          });
      }
 -    let returnedValue;
@@ -157,52 +174,18 @@ index 105fffa..d89b4f9 100644
      }
      catch (error) {
          if (adviceAspectMap.has(advice_enum_1.Advice.TryCatch)) {
-             (_c = adviceAspectMap.get(advice_enum_1.Advice.TryCatch)) === null || _c === void 0 ? void 0 : _c.forEach(aspect => {
--                aspect.execute(target, [error, ...args]);
-+                if (aspect.args) {
-+                    args.push(aspect.args);
-+                }
-+                aspect.execute(target, [error, args]);
-             });
-         }
-         else {
-@@ -32,23 +42,35 @@ function proxyFunc(target, methodContainer, ...args) {
-     finally {
-         if (adviceAspectMap.has(advice_enum_1.Advice.TryFinally)) {
-             (_d = adviceAspectMap.get(advice_enum_1.Advice.TryFinally)) === null || _d === void 0 ? void 0 : _d.forEach(aspect => {
-+                if (aspect.args) {
-+                    args.push(aspect.args);
-+                }
-                 aspect.execute(target, args);
-             });
-         }
-     }
-     if (adviceAspectMap.has(advice_enum_1.Advice.Around)) {
-         (_e = adviceAspectMap.get(advice_enum_1.Advice.Around)) === null || _e === void 0 ? void 0 : _e.forEach(aspect => {
-+            if (aspect.args) {
-+                args.push(aspect.args);
-+            }
-             aspect.execute(target, args);
-         });
-     }
-     if (adviceAspectMap.has(advice_enum_1.Advice.After)) {
-         (_f = adviceAspectMap.get(advice_enum_1.Advice.After)) === null || _f === void 0 ? void 0 : _f.forEach(aspect => {
-+            if (aspect.args) {
-+                args.push(aspect.args);
-+            }
-             aspect.execute(target, args);
-         });
+@@ -48,9 +49,9 @@ function proxyFunc(target, methodContainer, ...args) {
      }
      if (adviceAspectMap.has(advice_enum_1.Advice.AfterReturn)) {
          (_g = adviceAspectMap.get(advice_enum_1.Advice.AfterReturn)) === null || _g === void 0 ? void 0 : _g.forEach(aspect => {
 -            returnedValue = aspect.execute(target, [returnedValue]);
-+            if (aspect.args) {
-+                args.push(aspect.args);
-+            }
 +            returnedValue = aspect.execute(target, [returnedValue, args]);
          });
      }
      return returnedValue;
+-}
++};
+ exports.proxyFunc = proxyFunc;
 diff --git a/node_modules/ts-aspect/build/resetAllAspects.js b/node_modules/ts-aspect/build/resetAllAspects.js
 index ae5170f..cb8793a 100644
 --- a/node_modules/ts-aspect/build/resetAllAspects.js

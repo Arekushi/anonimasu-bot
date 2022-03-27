@@ -1,6 +1,8 @@
+import 'reflect-metadata';
+
 import { env } from './enviroments';
-import { init } from './server';
+import { run } from './server';
 
 
 env();
-init();
+run();

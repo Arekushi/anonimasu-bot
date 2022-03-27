@@ -1,4 +1,4 @@
-import { NullReturnAsyncAspect } from '@bot/aspects/null-return-async.aspect';
+import { NullReturnAsyncAspect } from '@core/aspects/null-return-async.aspect';
 import { CheckPlayCommandUsageAspect } from '@bot/aspects/check-play-command-usage.aspect';
 import { NullReturnException } from '@bot/exceptions/null-return.exception';
 import { Music } from '@bot/interfaces/music.interface';

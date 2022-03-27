@@ -1,9 +1,9 @@
 import config from 'config';
 
 import { NonExistentCommandException } from '@bot/exceptions/non-existent-command.exception';
-import { NullReturnAspect } from '@bot/aspects/null-return.aspect';
+import { NullReturnAspect } from '@core/aspects/null-return.aspect';
 import { Case } from '@bot/enums/string-case.enum';
-import { ToCaseParametersAspect } from '@bot/aspects/to-case-parameters.aspect';
+import { ToCaseParametersAspect } from '@core/aspects/to-case-parameters.aspect';
 import { getPropertyByIndex } from '@core/utils/object.util';
 import { getFiles } from '@core/utils/string.util';
 import { Intents, Client, Collection, Message } from 'discord.js';

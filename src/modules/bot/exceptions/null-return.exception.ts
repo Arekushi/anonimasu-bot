@@ -1,5 +1,5 @@
 import { Bot } from '@bot/classes/bot.class';
-import { LogExceptionAspect } from '@bot/aspects/log-exception.aspect';
+import { LogExceptionAspect } from '@core/aspects/log-exception.aspect';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { Message } from 'discord.js';
 import { Exception } from '@bot/classes/exception.class';

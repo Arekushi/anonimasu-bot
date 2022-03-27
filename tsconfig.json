@@ -4,15 +4,11 @@
         "rootDir": ".",
         "outDir": "dist",
         "paths": {
-            "@client/*": ["./src/client/*"],
-            "@commands/*": ["./src/commands/*"],
-            "@enums/*": ["./src/enums/*"],
-            "@events/*": ["./src/events/*"],
-            "@interfaces/*": ["./src/interfaces/*"],
-            "@classes/*": ["./src/classes/*"],
-            "@utils/*": ["./src/utils/*"],
-            "@aspects/*": ["./src/aspects/*"],
-            "@exceptions/*": ["./src/exceptions/*"]
+            "@src/*": ["./src/*"],
+            "@assets/*": ["./src/assets/*"],
+            "@modules/*": ["./src/modules/*"],
+            "@core/*": ["./src/core/*"],
+            "@bot/*": ["./src/modules/bot/*"]
         },
         "plugins": [
             {

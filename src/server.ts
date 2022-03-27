@@ -4,7 +4,7 @@ import consola from 'consola';
 import toBoolean from 'to-boolean';
 
 import { container } from 'tsyringe';
-import { AnonimasuBot } from '@client/anonimasu.bot';
+import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { App } from './app';
 import { Express } from 'express';
 

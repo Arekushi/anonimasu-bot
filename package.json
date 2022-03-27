@@ -10,7 +10,7 @@
     "dev": "cross-env NODE_ENV=development npm run nodemon",
     "prod": "cross-env NODE_ENV=production npm run start",
     "postinstall": "npm run build",
-    "build": "npm run build:types && npm run build:js",
+    "build": "npm run build:js",
     "build:types": "tsc --emitDeclarationOnly && tsc-alias",
     "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps true",
     "git:log": "git log --pretty=format:\"%h - %an, %ar : %s\""

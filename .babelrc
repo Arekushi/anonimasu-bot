@@ -1,0 +1,37 @@
+{
+	"presets": [
+        "@babel/preset-env",
+        "@babel/typescript"
+    ],
+    "plugins": [
+        [
+            "@babel/plugin-transform-runtime",
+            {
+              "regenerator": true,
+              "corejs": 3
+            }
+        ],
+        [
+            "module-resolver",
+            {
+                "root": ["."],
+                "alias": {
+                    "@client": "./src/client",
+                    "@commands": "./src/commands",
+                    "@enums": "./src/enums",
+                    "@events": "./src/events",
+                    "@interfaces": "./src/interfaces",
+                    "@classes": "./src/classes",
+                    "@utils": "./src/utils",
+                    "@aspects": "./src/aspects",
+                    "@exceptions": "./src/exceptions"
+                }
+            }
+        ],
+        "@babel/plugin-transform-modules-commonjs",
+        ["@babel/plugin-proposal-private-property-in-object", { "loose": true }],
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        ["@babel/plugin-proposal-class-properties", { "loose": true }],
+        ["@babel/plugin-proposal-private-methods", { "loose": true }]
+    ]
+}

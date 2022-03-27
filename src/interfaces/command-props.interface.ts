@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 
+
 export interface CommandProps {
     name: string;
     cooldownReply?: number;

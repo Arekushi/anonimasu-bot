@@ -1,4 +1,6 @@
-import { Bot } from 'classes/bot.class';
+import { Bot } from '@classes/bot.class';
+
+
 export abstract class Exception extends Error {
     constructor() {
         super();

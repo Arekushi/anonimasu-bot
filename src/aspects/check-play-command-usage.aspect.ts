@@ -1,10 +1,13 @@
-import { ReplyUserException } from 'exceptions/simple-reply.exception';
-import { Bot } from 'classes/bot.class';
-import { Command } from 'classes/command.class';
-import { Aspect } from 'ts-aspect';
+import { ReplyUserException } from '@exceptions/simple-reply.exception';
+import { Bot } from '@classes/bot.class';
+import { Command } from '@classes/command.class';
+import { Aspect, AspectContext } from '@arekushii/ts-aspect';
+
 
 export class CheckPlayCommandUsageAspect implements Aspect {
-    execute(command: Command<Bot>, args: string[]): void {
+
+    execute(ctx: AspectContext): void {
+        const command: Command<Bot> = ctx.target;
         const voiceChannel = command.message.member.voice.channel;
         const permissions = voiceChannel?.permissionsFor(command.message.client.user);
 
@@ -20,7 +23,7 @@ export class CheckPlayCommandUsageAspect implements Aspect {
             );
         }
 
-        if (!args[1].length) {
+        if (!ctx.functionParams[1].length) {
             throw new ReplyUserException(
                 command.message, 'Você precisa passar um segundo argumento!'
             );

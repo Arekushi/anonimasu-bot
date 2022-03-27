@@ -1,13 +1,13 @@
-import { Case } from 'enums/string-case.enum';
-import { toLower, toUpper } from 'utils/string.util';
-import { Bot } from 'classes/bot.class';
-import { Aspect } from 'ts-aspect';
+import { Case } from '@enums/string-case.enum';
+import { toLower, toUpper } from '@utils/string.util';
+import { Aspect, AspectContext } from '@arekushii/ts-aspect';
+
 
 export class ToCaseParametersAspect implements Aspect {
-    parameters: any[];
 
-    execute(bot: Bot, args: any[]): string[] {
-        const caseArg = this.parameters.shift();
+    execute(ctx: AspectContext): string[] {
+        const args = ctx.functionParams;
+        const caseArg = ctx.params;
 
         const strings = args.filter(e => {
             if (typeof e === 'string') {
@@ -18,7 +18,7 @@ export class ToCaseParametersAspect implements Aspect {
         switch (caseArg) {
             case Case.LOWER:
                 return strings.map(str => toLower(str));
-            
+
             case Case.UPPER:
                 return strings.map(str => toUpper(str));
         }

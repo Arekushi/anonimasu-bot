@@ -1,7 +1,8 @@
 import { Message } from 'discord.js';
-import { LogExceptionAspect } from 'aspects/log-exception.aspect';
-import { Exception } from "classes/exception.class";
-import { UseAspect, Advice } from 'ts-aspect';
+import { LogExceptionAspect } from '@aspects/log-exception.aspect';
+import { Exception } from '@classes/exception.class';
+import { UseAspect, Advice } from '@arekushii/ts-aspect';
+
 
 export class ReplyUserException extends Exception {
     discordMessage: Message;

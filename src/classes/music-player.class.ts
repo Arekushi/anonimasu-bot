@@ -1,6 +1,6 @@
 import ytdl from 'ytdl-core';
-import { Music } from 'interfaces/music.interface';
-import { MusicQueue } from 'interfaces/music-queue.interface';
+import { Music } from '@interfaces/music.interface';
+import { MusicQueue } from '@interfaces/music-queue.interface';
 import { Collection, Message } from 'discord.js';
 
 import {
@@ -11,25 +11,26 @@ import {
     VoiceConnection,
 } from '@discordjs/voice';
 
+
 export class MusicPlayer {
-    private queues: Collection<string, MusicQueue>;
-    private audioPlayer: AudioPlayer;
+    #queues: Collection<string, MusicQueue>;
+    #audioPlayer: AudioPlayer;
 
     constructor() {
-        this.queues = new Collection();
-        this.audioPlayer = createAudioPlayer();
+        this.#queues = new Collection();
+        this.#audioPlayer = createAudioPlayer();
     }
 
-    public hasQueue(guild: string) {
-        return this.queues.has(guild);
+    public hasQueue(guild: string): boolean {
+        return this.#queues.has(guild);
     }
 
-    public getQueue(guild: string) {
-        return this.queues.get(guild);
+    public getQueue(guild: string): MusicQueue {
+        return this.#queues.get(guild);
     }
 
     public addMusic(guild: string, music: Music): void {
-        const musicQueue = this.queues.get(guild);
+        const musicQueue = this.#queues.get(guild);
         musicQueue.musics.push(music);
     }
 
@@ -41,17 +42,17 @@ export class MusicPlayer {
             musics: []
         };
 
-        this.queues.set(message.guild.id, musicQueue);
-        musicQueue.connection.subscribe(this.audioPlayer);
+        this.#queues.set(message.guild.id, musicQueue);
+        musicQueue.connection.subscribe(this.#audioPlayer);
     }
 
     public endQueue(guild: string): void {
-        this.queues.delete(guild);
+        this.#queues.delete(guild);
     }
 
     public async playMusic(guid: string, music: Music): Promise<void> {
-        const songQueued = this.queues.get(guid);
-        
+        const songQueued = this.#queues.get(guid);
+
         // if (!songQueued) {
         //     this.leaveVoiceChannel();
         //     this.queues.delete(guid);
@@ -60,7 +61,7 @@ export class MusicPlayer {
 
         const stream = ytdl(music.url, { filter: 'audioonly' });
         const audio = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-        this.audioPlayer.play(audio);
+        this.#audioPlayer.play(audio);
     }
 
     public pauseSong(): void {

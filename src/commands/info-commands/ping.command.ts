@@ -1,5 +1,6 @@
-import { AnonimasuBot } from 'client/anonimasu.bot';
-import { Command } from 'classes/command.class';
+import { AnonimasuBot } from '@client/anonimasu.bot';
+import { Command } from '@classes/command.class';
+
 
 export class Ping extends Command<AnonimasuBot> {
     constructor(client: AnonimasuBot) {
@@ -12,6 +13,6 @@ export class Ping extends Command<AnonimasuBot> {
     }
 
     async action(client: AnonimasuBot, args: string[]): Promise<void> {
-        await this.respond("Pong");
+        await this.respond('Pong');
     }
 }

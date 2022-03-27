@@ -1,3 +1,6 @@
-import { AnonimasuBot } from 'client/anonimasu.bot';
+import { env } from './enviroments';
+import { init } from './server';
 
-new AnonimasuBot().init();
+
+env();
+init();

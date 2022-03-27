@@ -1,10 +1,11 @@
 import { VoiceConnection } from '@discordjs/voice';
-import { Music } from 'interfaces/music.interface';
-import { StageChannel, TextBasedChannels, VoiceChannel } from "discord.js";
+import { Music } from '@interfaces/music.interface';
+import { StageChannel, VoiceChannel } from 'discord.js';
+
 
 export interface MusicQueue {
     voiceChannel: VoiceChannel | StageChannel;
-    textChannel: TextBasedChannels;
+    textChannel: any;
     connection?: VoiceConnection;
     musics: Music[];
 }

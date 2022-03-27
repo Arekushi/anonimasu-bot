@@ -1,8 +1,9 @@
-import { AnonimasuBot } from 'client/anonimasu.bot';
-import { Event } from 'classes/event.class';
+import { AnonimasuBot } from '@client/anonimasu.bot';
+import { Event } from '@classes/event.class';
 import consola from 'consola';
 
-export class Ready extends Event<AnonimasuBot> {
+
+export class ReadyEvent extends Event<AnonimasuBot> {
     constructor() {
         super({
             name: 'ready'

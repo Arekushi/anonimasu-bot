@@ -1,8 +1,9 @@
-import { Bot } from 'classes/bot.class';
-import { LogExceptionAspect } from 'aspects/log-exception.aspect';
-import { UseAspect, Advice } from 'ts-aspect';
+import { Bot } from '@classes/bot.class';
+import { LogExceptionAspect } from '@aspects/log-exception.aspect';
+import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { Message } from 'discord.js';
-import { Exception } from "classes/exception.class";
+import { Exception } from '@classes/exception.class';
+
 
 export class NonExistentCommandException extends Exception {
     constructor() {

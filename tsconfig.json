@@ -1,35 +1,47 @@
 {
     "compilerOptions": {
-        "baseUrl": "src",
+        "baseUrl": ".",
+        "rootDir": ".",
         "outDir": "dist",
         "paths": {
-            "@client/*": ["src/client/*"],
-            "@commands/*": ["src/commands/*"],
-            "@enums/*": ["src/enums/*"],
-            "@events/*": ["src/events/*"],
-            "@interfaces/*": ["src/interfaces/*"],
-            "@classes/*": ["src/classes/*"],
-            "@utils/*": ["src/utils/*"],
-            "@aspects/*": ["src/aspects/*"],
-            "@exceptions/*": ["src/exceptions/*"]
+            "@client/*": ["./src/client/*"],
+            "@commands/*": ["./src/commands/*"],
+            "@enums/*": ["./src/enums/*"],
+            "@events/*": ["./src/events/*"],
+            "@interfaces/*": ["./src/interfaces/*"],
+            "@classes/*": ["./src/classes/*"],
+            "@utils/*": ["./src/utils/*"],
+            "@aspects/*": ["./src/aspects/*"],
+            "@exceptions/*": ["./src/exceptions/*"]
         },
         "plugins": [
-            { "name": "typescript-tslint-plugin" }
+            {
+                "name": "typescript-tslint-plugin"
+            }
         ],
         "module": "CommonJS",
-        "moduleResolution": "node",
         "target": "ESNext",
+        "moduleResolution": "node",
         "importHelpers": true,
         "sourceMap": true,
         "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "declaration": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     },
-    "lib": ["ESNext"],
-    "include": ["src"],
-    "exclude": ["node_modules"]
+    "lib": [
+        "ES2017",
+        "ES6",
+        "ESNext"
+    ],
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }

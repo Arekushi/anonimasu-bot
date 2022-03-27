@@ -1,35 +1,41 @@
-import { NonExistentCommandException } from 'exceptions/non-existent-command.exception';
-import { NullReturnAspect } from 'aspects/null-return.aspect';
-import { Case } from 'enums/string-case.enum';
-import { ToCaseParametersAspect } from 'aspects/to-case-parameters.aspect';
-import { getPropertyByIndex } from 'utils/object.util';
-import { getFiles } from 'utils/string.util';
+import config from 'config';
+
+import { NonExistentCommandException } from '@exceptions/non-existent-command.exception';
+import { NullReturnAspect } from '@aspects/null-return.aspect';
+import { Case } from '@enums/string-case.enum';
+import { ToCaseParametersAspect } from '@aspects/to-case-parameters.aspect';
+import { getPropertyByIndex } from '@utils/object.util';
+import { getFiles } from '@utils/string.util';
 import { Intents, Client, Collection, Message } from 'discord.js';
-import { Config } from 'interfaces/config.interface';
-import { Command } from 'classes/command.class';
-import { Event } from 'classes/event.class';
-import ConfigJson from '../config.json';
-import { UseAspect, Advice } from 'ts-aspect';
+import { Config } from '@interfaces/config.interface';
+import { Command } from '@classes/command.class';
+import { Event } from '@classes/event.class';
+import { UseAspect, Advice } from '@arekushii/ts-aspect';
+
 
 const FLAGS = Intents.FLAGS;
 
+
 export abstract class Bot extends Client {
-    public config: Config = ConfigJson;
+    #config: Config;
+    #commands: Collection<string, Command<Bot>>;
+    #events: Collection<string, Event<Bot>>;
+    #aliases: Collection<string, string>;
 
-    private _commands: Collection<string, Command<Bot>>;
-    private _events: Collection<string, Event<Bot>>;
-    private _aliases: Collection<string, string>;
-
-    get commands() {
-        return this._commands;
+    get config(): Config {
+        return this.#config;
     }
 
-    get events() {
-        return this._events;
+    get commands(): Collection<string, Command<Bot>> {
+        return this.#commands;
     }
 
-    get aliases() {
-        return this._aliases;
+    get events(): Collection<string, Event<Bot>> {
+        return this.#events;
+    }
+
+    get aliases(): Collection<string, string> {
+        return this.#aliases;
     }
 
     constructor() {
@@ -46,14 +52,18 @@ export abstract class Bot extends Client {
             ]
         });
 
-        this._commands = new Collection();
-        this._events = new Collection();
-        this._aliases = new Collection();
+        this.#commands = new Collection();
+        this.#events = new Collection();
+        this.#aliases = new Collection();
+
+        this.#config = {
+            prefix: config.get('prefix'),
+            token: process.env.TOKEN
+        };
     }
 
     public async init(): Promise<void> {
         this.login(this.config.token);
-
         await this.setup();
     }
 
@@ -77,8 +87,9 @@ export abstract class Bot extends Client {
         const eventsFiles = await getFiles('events');
 
         [commandsFiles, eventsFiles].forEach(files => {
-            files.forEach(async (value: string) => {
-                const request = getPropertyByIndex(await import(value));
+            files.forEach(async (file: string) => {
+                const imported = await import(file);
+                const request = getPropertyByIndex(imported);
                 const instance = new request(this);
 
                 if (instance instanceof Command) {

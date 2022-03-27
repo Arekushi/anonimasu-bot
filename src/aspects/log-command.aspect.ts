@@ -1,10 +1,14 @@
-import { Bot } from 'classes/bot.class';
-import { Command } from 'classes/command.class';
-import { Aspect } from 'ts-aspect';
 import consola from 'consola';
 
+import { Bot } from '@classes/bot.class';
+import { Command } from '@classes/command.class';
+import { Aspect, AspectContext } from '@arekushii/ts-aspect';
+
+
 export class LogCommandAspect implements Aspect {
-    execute(command: Command<Bot>): void {
+
+    execute(ctx: AspectContext): void {
+        const command: Command<Bot> = ctx.target;
         const username = command.message.author.username;
         const date = new Date().toTimeString();
 

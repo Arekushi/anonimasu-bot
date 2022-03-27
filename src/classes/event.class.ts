@@ -1,6 +1,7 @@
-import { logException } from 'utils/exception.util';
-import { EventProps } from 'interfaces/event-props.interface';
-import { Bot } from 'classes/bot.class';
+import { logException } from '@utils/exception.util';
+import { EventProps } from '@interfaces/event-props.interface';
+import { Bot } from '@classes/bot.class';
+
 
 export abstract class Event<T extends Bot> {
     name: string;

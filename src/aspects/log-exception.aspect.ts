@@ -1,9 +1,13 @@
 import consola from 'consola';
-import { Exception } from 'classes/exception.class';
-import { Aspect } from 'ts-aspect';
+
+import { Exception } from '@classes/exception.class';
+import { Aspect, AspectContext } from '@arekushii/ts-aspect';
+
 
 export class LogExceptionAspect implements Aspect {
-    execute(exception: Exception): void {
+
+    execute(ctx: AspectContext): void {
+        const exception: Exception = ctx.target;
         consola.error(exception.message);
     }
 }

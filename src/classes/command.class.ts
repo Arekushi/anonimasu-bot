@@ -1,11 +1,12 @@
-import { logException } from 'utils/exception.util';
-import { LogCommandAspect } from 'aspects/log-command.aspect';
-import { CheckCommandUsageAspect } from 'aspects/check-command-usage.aspect';
-import { Bot } from 'classes/bot.class';
-import { CommandProps } from 'interfaces/command-props.interface';
+import { logException } from '@utils/exception.util';
+import { LogCommandAspect } from '@aspects/log-command.aspect';
+import { CheckCommandUsageAspect } from '@aspects/check-command-usage.aspect';
+import { Bot } from '@classes/bot.class';
+import { CommandProps } from '@interfaces/command-props.interface';
 import { Message, MessageOptions, MessagePayload, Collection } from 'discord.js';
-import { UseAspect, Advice } from 'ts-aspect';
+import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import moment, { Moment } from 'moment';
+
 
 export abstract class Command<T extends Bot> {
     name: string;
@@ -38,7 +39,7 @@ export abstract class Command<T extends Bot> {
 
     startCooldown(): void {
         this.cooldownUsers.set(
-            this.message.author.id, 
+            this.message.author.id,
             moment().add(this.cooldownToUse, 'milliseconds')
         );
     }
@@ -58,7 +59,7 @@ export abstract class Command<T extends Bot> {
                 })
                 .catch((err) => {
                     logException(err, client, this.message);
-                })
+                });
             } catch (e) {
                 await logException(e, client, this.message);
             }

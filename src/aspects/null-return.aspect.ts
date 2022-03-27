@@ -1,13 +1,13 @@
-import { Aspect } from 'ts-aspect';
+import { Aspect, AspectContext } from '@arekushii/ts-aspect';
+
 
 export class NullReturnAspect implements Aspect {
-    parameters: any[];
 
-    execute(target: any, returned: any[]): any {
-        const exception = this.parameters.pop();
-        const methodReturn = returned.shift();
+    execute(ctx: AspectContext): any {
+        const exception = ctx.params;
+        const methodReturn = ctx.returnValue;
 
-        if(!methodReturn) {
+        if (!methodReturn) {
             throw exception;
         }
 

@@ -1,8 +1,9 @@
-import { AnonimasuBot } from 'client/anonimasu.bot';
-import { CheckMessageAspect } from 'aspects/check-message.aspect';
+import { AnonimasuBot } from '@client/anonimasu.bot';
+import { CheckMessageAspect } from '@aspects/check-message.aspect';
 import { Message } from 'discord.js';
-import { Event } from 'classes/event.class';
-import { UseAspect, Advice } from 'ts-aspect';
+import { Event } from '@classes/event.class';
+import { UseAspect, Advice } from '@arekushii/ts-aspect';
+
 
 export class MessageEvent extends Event<AnonimasuBot> {
     constructor() {

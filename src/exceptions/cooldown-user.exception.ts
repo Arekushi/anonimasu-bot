@@ -1,8 +1,9 @@
-import { Bot } from 'classes/bot.class';
-import { LogExceptionAspect } from 'aspects/log-exception.aspect';
-import { UseAspect, Advice } from 'ts-aspect';
-import { Exception } from "classes/exception.class";
-import { Command } from "classes/command.class";
+import { Bot } from '@classes/bot.class';
+import { LogExceptionAspect } from '@aspects/log-exception.aspect';
+import { UseAspect, Advice } from '@arekushii/ts-aspect';
+import { Exception } from '@classes/exception.class';
+import { Command } from '@classes/command.class';
+
 
 export class CooldownException extends Exception {
     command: Command<Bot>;
@@ -11,7 +12,7 @@ export class CooldownException extends Exception {
         super();
 
         this.command = command;
-        this.message = `O usuário ${this.command.message.author.username} ` + 
+        this.message = `O usuário ${this.command.message.author.username} ` +
             `não pode usar o comando ${this.command.name} por enquanto. Aguarde.`;
     }
 

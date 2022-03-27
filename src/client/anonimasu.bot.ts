@@ -1,6 +1,6 @@
-import { MusicPlayer } from 'classes/music-player.class';
+import { MusicPlayer } from '@classes/music-player.class';
 import { Message } from 'discord.js';
-import { Bot } from "classes/bot.class";
+import { Bot } from '@classes/bot.class';
 
 import {
     joinVoiceChannel,
@@ -9,17 +9,18 @@ import {
     entersState
 } from '@discordjs/voice';
 
+
 export class AnonimasuBot extends Bot {
 
-    private _musicPlayer: MusicPlayer;
+    #musicPlayer: MusicPlayer;
 
-    get musicPlayer() {
-        return this._musicPlayer;
+    get musicPlayer(): MusicPlayer {
+        return this.#musicPlayer;
     }
 
     constructor() {
         super();
-        this._musicPlayer = new MusicPlayer();
+        this.#musicPlayer = new MusicPlayer();
     }
 
     public async joinVoiceChannel(message: Message): Promise<VoiceConnection> {

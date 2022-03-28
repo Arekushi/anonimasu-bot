@@ -8,7 +8,10 @@
     "start:dist": "node dist/index.js",
 
     "dev": "cross-env NODE_ENV=development nodemon",
+    "dev:dist": "cross-env NODE_ENV=development npm run start:dist",
+
     "prod": "cross-env NODE_ENV=production npm run start",
+    "prod:dist": "cross-env NODE_ENV=production npm run start:dist",
 
     "ts-node": "ts-node -r tsconfig-paths/register ./src/index.ts",
     "ts-node:dev": "ts-node-dev -r tsconfig-paths/register ./src/index.ts --respawn --transpile-only --poll ./src/index.ts",

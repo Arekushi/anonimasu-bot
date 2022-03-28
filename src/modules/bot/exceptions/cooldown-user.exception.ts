@@ -1,7 +1,7 @@
 import { Bot } from '@bot/classes/bot.class';
 import { LogExceptionAspect } from '@core/aspects/log-exception.aspect';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
-import { Exception } from '@bot/classes/exception.class';
+import { Exception } from '@core/classes/exception.class';
 import { Command } from '@bot/classes/command.class';
 
 

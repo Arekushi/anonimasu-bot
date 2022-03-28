@@ -27,7 +27,8 @@
                     "@assets": "./src/assets",
                     "@modules": "./src/modules",
                     "@core": "./src/core",
-                    "@bot": "./src/modules/bot"
+                    "@bot": "./src/modules/bot",
+                    "@database": "./src/modules/database"
                 }
             }
         ],

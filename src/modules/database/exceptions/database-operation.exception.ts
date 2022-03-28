@@ -1,14 +1,13 @@
-import { User } from 'discord.js';
 import { LogExceptionAspect } from '@core/aspects/log-exception.aspect';
 import { Exception } from '@core/classes/exception.class';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 
 
-export class SimpleException extends Exception {
-    constructor(user: User, msg: string) {
+export class DatabaseOperationException extends Exception {
+    constructor(operation: string, error?: any) {
         super();
 
-        this.message = `[${user.username}] - ${msg} - ${new Date().toTimeString()}`;
+        this.message = `[Não foi possível realizar] - [${operation}] - ${new Date().toTimeString()} - ${error}`;
     }
 
     @UseAspect(Advice.Before, LogExceptionAspect)

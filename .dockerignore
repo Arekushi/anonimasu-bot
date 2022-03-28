@@ -2,6 +2,8 @@
 **/.dockerignore
 **/.git
 **/.env
+**/.env.development
+**/.env.production
 **/.gitignore
 **/.project
 **/.settings

@@ -1,4 +1,4 @@
-import { logException } from '@core/utils/exception.util';
+import { runException } from '@core/utils/exception.util';
 import { EventProps } from '@bot/interfaces/event-props.interface';
 import { Bot } from '@bot/classes/bot.class';
 
@@ -14,7 +14,7 @@ export abstract class Event<T extends Bot> {
         try {
             await this.action(client, ...args);
         } catch (e) {
-            await logException(e, client, ...args);
+            await runException(e, client, ...args);
         }
     }
 

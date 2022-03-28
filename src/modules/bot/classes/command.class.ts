@@ -1,4 +1,4 @@
-import { logException } from '@core/utils/exception.util';
+import { runException } from '@core/utils/exception.util';
 import { LogCommandAspect } from '@bot/aspects/log-command.aspect';
 import { CheckCommandUsageAspect } from '@bot/aspects/check-command-usage.aspect';
 import { Bot } from '@bot/classes/bot.class';
@@ -52,16 +52,16 @@ export abstract class Command<T extends Bot> {
         setTimeout(async () => {
             try {
                 this.action(client, args)
-                .then(() => {
-                    if (this.cooldownToUse > 0) {
-                        this.startCooldown();
-                    }
-                })
-                .catch((err) => {
-                    logException(err, client, this.message);
-                });
+                    .then(() => {
+                        if (this.cooldownToUse > 0) {
+                            this.startCooldown();
+                        }
+                    })
+                    .catch((err) => {
+                        runException(err, client, this.message);
+                    });
             } catch (e) {
-                await logException(e, client, this.message);
+                await runException(e, client, this.message);
             }
         }, this.cooldownReply);
     }

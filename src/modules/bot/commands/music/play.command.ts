@@ -1,6 +1,6 @@
 import { NullReturnAsyncAspect } from '@core/aspects/null-return-async.aspect';
 import { CheckPlayCommandUsageAspect } from '@bot/aspects/check-play-command-usage.aspect';
-import { NullReturnException } from '@bot/exceptions/null-return.exception';
+import { BotNullReturnException } from '@bot/exceptions/bot-null-return.exception';
 import { Music } from '@bot/interfaces/music.interface';
 import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';
@@ -38,7 +38,7 @@ export class Play extends Command<AnonimasuBot> {
         this.message.channel.send(`Tocando a música: ${music.title}`);
     }
 
-    @UseAspect(Advice.AfterReturn, NullReturnAsyncAspect, new NullReturnException('Test'))
+    @UseAspect(Advice.AfterReturn, NullReturnAsyncAspect, new BotNullReturnException('Test'))
     private async test(): Promise<any> {
         return null;
     }
@@ -59,7 +59,7 @@ export class Play extends Command<AnonimasuBot> {
         }
     }
 
-    @UseAspect(Advice.AfterReturn, NullReturnAsyncAspect, new NullReturnException('VideoFinder'))
+    @UseAspect(Advice.AfterReturn, NullReturnAsyncAspect, new BotNullReturnException('VideoFinder'))
     private async videoFinder(query: string): Promise<any> {
         const videoResults = await ytSearch(query);
         return videoResults?.videos[0];

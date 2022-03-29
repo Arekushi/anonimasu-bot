@@ -3,6 +3,18 @@ import { entitySchema } from '@database/schemas/entity.schema';
 
 
 export const serverSchema = extendSchema(entitySchema, {
-    id: { type: String, required: true },
-    locale: { type: String, required: true }
+    discordId: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    locale: {
+        type: String,
+        required: true,
+        default: 'pt'
+    },
+    test: {
+        type: String,
+        required: true
+    }
 });

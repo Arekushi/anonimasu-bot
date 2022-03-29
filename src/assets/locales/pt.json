@@ -1,0 +1,42 @@
+{
+    "logs": {
+
+    },
+    "exceptions": {
+
+    },
+    "commands": {
+        "yes_or_no": {
+            "responses": {
+                "yes": [
+                    "Eu acho que sim!",
+                    "Tem muitas chances de ser verdade",
+                    "É verdade, confia :)",
+                    "Eu pesquisei no Google agora mesmo, e posso confirmar isso",
+                    "Sendo sincera, pau no seu cu",
+                    "O não você já tem, então minha resposta é sim",
+                    "Caralho, para com isso, eu já disse que sim",
+                    "Por que você não tenta calar a porra da boca, a resposta é sim",
+                    "Desculpa, eu me confundi, eu queria dizer era sim",
+                    "Segundo os meus calculos, começa com 's' e termina com 'im'",
+                    "return !!!!!!!!!!!!true"
+                ],
+                "no": [
+                    "Mais falso que sua amiga da escola ;)",
+                    "Isso é uma mentira, isso não pode ser verdadeKKKKKKKKKKKKKKKKKKKKKKKKKK",
+                    "É mentira, confia 'u'",
+                    "Se isso for verdade, eu sou real também >:(",
+                    "FAKE NEWS, o golpe tá aí, cai quem quer",
+                    "Mais falso que nota de 3 reais",
+                    "Minha resposta é não e ponto.com",
+                    "Segundo as pesquisas da Nasa, eu acabei de comer o cu de quem tá lendoKKKKKKKKKKKKKK",
+                    "Foda-se, NÃO",
+                    "Desculpa, é que isso é muito difícil de calcular. Igual o peso da sua mãe, aquela gorda fudida"
+                ]
+            }
+        }
+    },
+    "events": {
+
+    }
+}

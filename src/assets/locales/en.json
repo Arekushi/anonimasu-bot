@@ -1,0 +1,19 @@
+{
+    "logs": {
+
+    },
+    "exceptions": {
+
+    },
+    "commands": {
+        "yes_or_no": {
+            "responses": {
+                "yes": [],
+                "no": []
+            }
+        }
+    },
+    "events": {
+
+    }
+}

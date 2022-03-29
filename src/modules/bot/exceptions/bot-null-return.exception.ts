@@ -6,10 +6,11 @@ import { Message } from 'discord.js';
 import { Exception } from '@core/classes/exception.class';
 
 
-export class NullReturnException extends Exception {
-    method: string;
+export class BotNullReturnException extends Exception {
 
-    constructor(method: string) {
+    constructor(
+        public method: string
+    ) {
         super();
 
         this.method = method;

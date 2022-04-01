@@ -1,3 +1,4 @@
+import { Message } from 'discord.js';
 import moment from 'moment';
 
 import { Bot } from '@bot/classes/bot.class';
@@ -10,14 +11,15 @@ export class CheckCommandUsageAspect implements Aspect {
 
     execute(ctx: AspectContext): void {
         const command: Command<Bot> = ctx.target;
-        const userId = command.message.author.id;
-        const commandMoment = command.cooldownUsers.get(userId);
+        const message: Message = ctx.functionParams[0];
+        const userId = message.author.id;
+        const commandMoment = command.cooldown.users.get(userId);
 
         if (commandMoment) {
             if (moment().isBefore(commandMoment)) {
-                throw new CooldownException(command);
+                throw new CooldownException(command, message);
             } else {
-                command.cooldownUsers.delete(userId);
+                command.cooldown.users.delete(userId);
             }
         }
     }

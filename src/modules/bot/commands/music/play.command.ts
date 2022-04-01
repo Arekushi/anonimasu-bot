@@ -1,3 +1,4 @@
+import { Message } from 'discord.js';
 import { NullReturnAsyncAspect } from '@core/aspects/null-return-async.aspect';
 import { CheckPlayCommandUsageAspect } from '@bot/aspects/check-play-command-usage.aspect';
 import { BotNullReturnException } from '@bot/exceptions/bot-null-return.exception';
@@ -10,37 +11,35 @@ import ytdl from 'ytdl-core';
 
 
 export class Play extends Command<AnonimasuBot> {
-    constructor(client: AnonimasuBot) {
+
+    constructor(
+        client: AnonimasuBot
+    ) {
         super(client, {
-            name: 'play',
-            description: 'Comando para dar play em alguma música.',
-            cooldownReply: 0,
-            cooldownToUse: 0,
+            data: {
+                name: 'play',
+                description: 'Comando para dar play em alguma música.'
+            },
             aliases: ['p']
         });
     }
 
     @UseAspect(Advice.Before, CheckPlayCommandUsageAspect)
-    async action(client: AnonimasuBot, args: string[]): Promise<void> {
-        const music = await this.getMusic(args);
-        const guildId = this.message.guild.id;
-        const hasQueue = client.musicPlayer.hasQueue(guildId);
+    async action(message: Message, args: string[]): Promise<void> {
+        // const music = await this.getMusic(args);
+        // const guildId = this.message.guild.id;
+        // const hasQueue = this.client.musicPlayer.hasQueue(guildId);
 
-        if (!hasQueue) {
-            const connection = await client.joinVoiceChannel(this.message);
-            client.musicPlayer.startQueue(this.message, connection);
-            client.musicPlayer.addMusic(guildId, music);
-            client.musicPlayer.playMusic(guildId, music);
-        } else {
-            client.musicPlayer.addMusic(guildId, music);
-        }
+        // if (!hasQueue) {
+        //     const connection = await this.client.joinVoiceChannel(this.message);
+        //     this.client.musicPlayer.startQueue(this.message, connection);
+        //     this.client.musicPlayer.addMusic(guildId, music);
+        //     this.client.musicPlayer.playMusic(guildId, music);
+        // } else {
+        //     this.client.musicPlayer.addMusic(guildId, music);
+        // }
 
-        this.message.channel.send(`Tocando a música: ${music.title}`);
-    }
-
-    @UseAspect(Advice.AfterReturn, NullReturnAsyncAspect, new BotNullReturnException('Test'))
-    private async test(): Promise<any> {
-        return null;
+        // this.message.channel.send(`Tocando a música: ${music.title}`);
     }
 
     private async getMusic(args: string[]): Promise<Music> {

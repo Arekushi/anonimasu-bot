@@ -1,0 +1,15 @@
+import { Intents } from 'discord.js';
+
+
+const FLAGS = Intents.FLAGS;
+
+export const intents = [
+    FLAGS.GUILDS,
+    FLAGS.DIRECT_MESSAGES,
+    FLAGS.DIRECT_MESSAGE_REACTIONS,
+    FLAGS.GUILD_INVITES,
+    FLAGS.GUILD_VOICE_STATES,
+    FLAGS.GUILD_MEMBERS,
+    FLAGS.GUILD_MESSAGES,
+    FLAGS.GUILD_PRESENCES
+];

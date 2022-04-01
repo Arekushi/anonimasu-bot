@@ -1,18 +1,23 @@
+import { Message } from 'discord.js';
 import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';
 
 
 export class Ping extends Command<AnonimasuBot> {
-    constructor(client: AnonimasuBot) {
+
+    constructor(
+        client: AnonimasuBot
+    ) {
         super(client, {
-            name: 'ping',
-            cooldownReply: 0,
-            cooldownToUse: 0,
+            data: {
+                name: 'ping',
+                description: 'Only a ping command'
+            },
             aliases: ['pg']
         });
     }
 
-    async action(client: AnonimasuBot, args: string[]): Promise<void> {
-        await this.respond('Pong');
+    async action(message: Message, args: any[]): Promise<void> {
+        await this.respond(message, 'Pong');
     }
 }

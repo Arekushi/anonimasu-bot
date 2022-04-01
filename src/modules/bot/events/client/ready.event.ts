@@ -7,14 +7,18 @@ import { LogBotOnlineAspect } from '@bot/aspects/log-bot-online.aspect';
 
 
 export class ReadyEvent extends Event<AnonimasuBot> {
-    constructor() {
-        super({
-            name: 'ready'
+
+    constructor(
+        client: AnonimasuBot
+    ) {
+        super(client, {
+            name: 'ready',
+            once: false
         });
     }
 
     @UseAspect(Advice.Before, LogBotOnlineAspect)
-    async action(client: AnonimasuBot): Promise<void> {
-        client.user.setActivity(config.get('bot.activity'));
+    async action(): Promise<void> {
+        this.client.user.setActivity(config.get('bot.activity'));
     }
 }

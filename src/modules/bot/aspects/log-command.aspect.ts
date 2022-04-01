@@ -1,3 +1,4 @@
+import { Message } from 'discord.js';
 import consola from 'consola';
 
 import { Bot } from '@bot/classes/bot.class';
@@ -9,11 +10,12 @@ export class LogCommandAspect implements Aspect {
 
     execute(ctx: AspectContext): void {
         const command: Command<Bot> = ctx.target;
-        const username = command.message.author.username;
+        const message: Message = ctx.functionParams[0];
+        const username = message.author.username;
         const date = new Date().toTimeString();
 
         consola.success(
-            `O usuário [${username}] usou o comando [${command.name}] - ${date}`
+            `O usuário [${username}] usou o comando [${command.data.name}] - ${date}`
         );
     }
 }

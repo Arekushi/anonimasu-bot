@@ -10,7 +10,7 @@ import { Express } from 'express';
 
 
 export const run = async (): Promise<void> => {
-    const anonymasu = await new AnonimasuBot().init();
+    const anonymasu = new AnonimasuBot();
     const port = process.env.PORT || config.get('port');
     const app = container.resolve(App);
 
@@ -19,6 +19,8 @@ export const run = async (): Promise<void> => {
             `Node Express server listening on http://localhost:${port}`
         );
     });
+
+    await anonymasu.init();
 
     if (toBoolean(process.env.LIST_ENDPOINTS || 'FALSE')) {
         consola.log(listEndpoints(app.app as Express));

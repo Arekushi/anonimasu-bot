@@ -6,6 +6,9 @@ export class ExceptionActionAspect implements Aspect {
 
     execute(ctx: AspectContext): void {
         runException(ctx.error);
-        throw ctx.error;
+
+        if (ctx.params) {
+            throw ctx.error;
+        }
     }
 }

@@ -6,19 +6,15 @@
   "scripts": {
     "start": "npm run ts-node",
     "start:dist": "node dist/index.js",
-
     "dev": "cross-env NODE_ENV=development nodemon",
     "prod": "cross-env NODE_ENV=production npm run start",
-
     "ts-node": "ts-node -r tsconfig-paths/register ./src/index.ts",
     "ts-node:dev": "ts-node-dev -r tsconfig-paths/register ./src/index.ts --respawn --transpile-only --poll ./src/index.ts",
-
     "build": "npm run rimraf:dist && npm run build:js",
     "build:types": "npm run rimraf:dist && tsc --emitDeclarationOnly && tsc-alias",
     "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps true",
     "postinstall": "npm run build",
     "rimraf:dist": "rimraf ./dist",
-
     "git:log": "git log --pretty=format:\"%h - %an, %ar : %s\""
   },
   "ntl": {
@@ -43,7 +39,9 @@
   "dependencies": {
     "@arekushii/ts-aspect": "^3.0.8",
     "@babel/runtime-corejs3": "^7.17.8",
+    "@discordjs/builders": "^0.12.0",
     "@discordjs/opus": "^0.7.0",
+    "@discordjs/rest": "^0.3.0",
     "@discordjs/voice": "^0.8.0",
     "axios": "^0.26.1",
     "config": "^3.3.7",
@@ -51,6 +49,7 @@
     "core-js": "^3.21.1",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "discord-api-types": "^0.30.0",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "dotenv-flow": "^3.2.0",

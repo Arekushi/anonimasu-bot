@@ -5,22 +5,28 @@ import { NullReturnAspect } from '@core/aspects/null-return.aspect';
 import { Case } from '@bot/enums/string-case.enum';
 import { ToCaseParametersAspect } from '@core/aspects/to-case-parameters.aspect';
 import { getPropertyByIndex } from '@core/utils/object.util';
-import { getFiles } from '@core/utils/string.util';
-import { Intents, Client, Collection, Message } from 'discord.js';
+import { getFiles } from '@bot/utils/file.util';
+import { Client, Collection, Message } from 'discord.js';
+import { ExceptionActionAspect } from '@core/aspects/exception-action.aspect';
 import { Config } from '@bot/interfaces/config.interface';
 import { Command } from '@bot/classes/command.class';
 import { Event } from '@bot/classes/event.class';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
-
-
-const FLAGS = Intents.FLAGS;
+import { REST } from '@discordjs/rest';
+import { LogSlashCommandsAspect } from '@bot/aspects/log-slash-commands.aspect';
+import { intents } from '@bot/default/bot-intents.default';
+import { guildCommands } from '@bot/functions/rest-api.function';
 
 
 export abstract class Bot extends Client {
+
     #config: Config;
     #commands: Collection<string, Command<Bot>>;
+    #commandsJSON: any[];
+
     #events: Collection<string, Event<Bot>>;
     #aliases: Collection<string, string>;
+    #restAPI: REST;
 
     get config(): Config {
         return this.#config;
@@ -28,6 +34,10 @@ export abstract class Bot extends Client {
 
     get commands(): Collection<string, Command<Bot>> {
         return this.#commands;
+    }
+
+    get commandsJSON(): any[] {
+        return this.#commandsJSON;
     }
 
     get events(): Collection<string, Event<Bot>> {
@@ -38,33 +48,34 @@ export abstract class Bot extends Client {
         return this.#aliases;
     }
 
+    get restAPI(): REST {
+        return this.#restAPI;
+    }
+
     constructor() {
         super({
-            intents: [
-                FLAGS.GUILDS,
-                FLAGS.DIRECT_MESSAGES,
-                FLAGS.DIRECT_MESSAGE_REACTIONS,
-                FLAGS.GUILD_INVITES,
-                FLAGS.GUILD_VOICE_STATES,
-                FLAGS.GUILD_MEMBERS,
-                FLAGS.GUILD_MESSAGES,
-                FLAGS.GUILD_PRESENCES
-            ]
+            intents
         });
 
         this.#commands = new Collection();
+        this.#commandsJSON = [];
         this.#events = new Collection();
         this.#aliases = new Collection();
 
         this.#config = {
             prefix: config.get('prefix'),
-            token: process.env.TOKEN
+            restOptions: config.get('bot.rest-options'),
+            token: process.env.TOKEN,
+            devGuild: process.env.DEV_GUILD_ID,
+            devClient: process.env.DEV_CLIENT_ID
         };
     }
 
     public async init(): Promise<void> {
         this.login(this.config.token);
+
         await this.setup();
+        await this.RestAPI();
     }
 
     @UseAspect(Advice.Before, ToCaseParametersAspect, Case.LOWER)
@@ -73,34 +84,56 @@ export abstract class Bot extends Client {
         return this.commands.get(name) || this.commands.get(this.aliases.get(name));
     }
 
-    public getMessageArgs(message: Message): string[] {
-        const args = message.content
-            .slice(this.config.prefix.length)
-            .trim()
-            .split(/ +/g);
-
-        return args;
-    }
-
     private async setup(): Promise<void> {
         const commandsFiles = await getFiles('commands');
         const eventsFiles = await getFiles('events');
 
-        [commandsFiles, eventsFiles].forEach(files => {
-            files.forEach(async (file: string) => {
+        for (const files of  [commandsFiles, eventsFiles]) {
+            for (const file of files) {
                 const imported = await import(file);
                 const request = getPropertyByIndex(imported);
                 const instance = new request(this);
 
                 if (instance instanceof Command) {
-                    this.commands.set(instance.name, instance);
-                    instance.aliases.forEach(aliase => this.aliases.set(aliase, instance.name));
+                    this.setupCommand(instance);
                 } else {
-                    this.events.set(instance.name, instance);
-                    this.on(instance.name, instance.run.bind(instance, this));
+                    this.setupEvent(instance);
                 }
-            });
+            }
+        }
+    }
+
+    private setupCommand(command: Command<Bot>): void {
+        this.#commands.set(command.data.name, command);
+        this.#commandsJSON.push(command.data.toJSON());
+
+        command.aliases.forEach(aliase => {
+            this.aliases.set(aliase, command.data.name);
         });
+    }
+
+    private setupEvent(event: Event<Bot>): void {
+        this.#events.set(event.name, event);
+
+        if (event.once) {
+            this.once(event.name, event.run.bind(event, this));
+        } else {
+            this.on(event.name, event.run.bind(event, this));
+        }
+    }
+
+    @UseAspect(Advice.TryCatch, ExceptionActionAspect)
+    @UseAspect(Advice.After, LogSlashCommandsAspect)
+    private async RestAPI(): Promise<void> {
+        const { devClient, devGuild, token, restOptions } = this.config;
+        this.#restAPI = new REST(restOptions).setToken(token);
+
+        await guildCommands(
+            this.#restAPI,
+            this.#commandsJSON,
+            devClient,
+            devGuild
+        );
     }
 
 }

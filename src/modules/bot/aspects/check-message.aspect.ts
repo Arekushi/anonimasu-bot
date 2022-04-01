@@ -7,8 +7,8 @@ import { Aspect, AspectContext } from '@arekushii/ts-aspect';
 export class CheckMessageAspect implements Aspect {
 
     execute(ctx: AspectContext): void {
-        const client: Bot = ctx.functionParams[0];
-        const message: Message = ctx.functionParams[1];
+        const client: Bot = ctx.target.client;
+        const message: Message = ctx.functionParams[0];
         const author = message.author;
         const prefix = client.config.prefix;
 

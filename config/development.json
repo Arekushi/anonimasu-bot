@@ -4,6 +4,9 @@
         "activity": {
             "name": "日本語",
             "type": "LISTENING"
+        },
+        "rest-options": {
+            "version": 9
         }
     }
 }

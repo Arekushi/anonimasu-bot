@@ -33,25 +33,6 @@ module.exports = {
         "@typescript-eslint/tslint"
     ],
     "rules": {
-        "@angular-eslint/component-class-suffix": "error",
-        "@angular-eslint/component-selector": [
-            "error",
-            {
-                "type": "element",
-                "prefix": "app",
-                "style": "kebab-case"
-            }
-        ],
-        "@angular-eslint/contextual-lifecycle": "error",
-        "@angular-eslint/directive-class-suffix": "error",
-        "@angular-eslint/directive-selector": [
-            "error",
-            {
-                "type": "attribute",
-                "prefix": "app",
-                "style": "camelCase"
-            }
-        ],
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "off",
         "@typescript-eslint/ban-types": [

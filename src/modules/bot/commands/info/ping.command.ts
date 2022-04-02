@@ -3,7 +3,7 @@ import { CommandContext } from '@bot/interfaces/command-context.interface';
 import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';
 import { reply } from '@bot/functions/communication.function';
-import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
+import { CommandOptionType } from '@bot/enums/command-option-type.enum';
 
 
 export class Ping extends Command<AnonimasuBot> {
@@ -19,7 +19,7 @@ export class Ping extends Command<AnonimasuBot> {
                     {
                         name: 'name',
                         description: 'Nome de teste',
-                        type: ApplicationCommandOptionTypes.STRING,
+                        type: CommandOptionType.STRING,
                         required: true
                     }
                 ]

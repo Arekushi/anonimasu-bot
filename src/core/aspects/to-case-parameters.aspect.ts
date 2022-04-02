@@ -6,21 +6,24 @@ import { Aspect, AspectContext } from '@arekushii/ts-aspect';
 export class ToCaseParametersAspect implements Aspect {
 
     execute(ctx: AspectContext): string[] {
-        const args = ctx.functionParams;
-        const caseArg = ctx.params;
+        const functionParams = ctx.functionParams;
+        const caseParam = ctx.params;
 
-        const strings = args.filter(e => {
+        const strings = functionParams.filter(e => {
             if (typeof e === 'string') {
                 return e;
             }
         });
 
-        switch (caseArg) {
+        switch (caseParam) {
             case Case.LOWER:
                 return strings.map(str => toLower(str));
 
             case Case.UPPER:
                 return strings.map(str => toUpper(str));
+
+            default:
+                return strings.map(str => toLower(str));
         }
     }
 }

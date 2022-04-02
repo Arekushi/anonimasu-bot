@@ -1,10 +1,12 @@
 import { Message } from 'discord.js';
-import { Bot } from '@bot/classes/bot.class';
 
 
-export const getMessageArgs = (client: Bot, message: Message): string[] => {
+export const getMessageArgs = (
+    prefix: string,
+    message: Message
+): string[] => {
     const args = message.content
-        .slice(client.config.prefix.length)
+        .slice(prefix.length)
         .trim()
         .split(/ +/g);
 

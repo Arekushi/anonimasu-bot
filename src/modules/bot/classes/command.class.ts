@@ -6,19 +6,18 @@ import { LogCommandAspect } from '@bot/aspects/log-command.aspect';
 import { CheckCommandUsageAspect } from '@bot/aspects/check-command-usage.aspect';
 import { Bot } from '@bot/classes/bot.class';
 import { CommandProps } from '@bot/interfaces/command-props.interface';
-import { CommandInteraction, Interaction, Collection, User } from 'discord.js';
+import { SlashData } from '@bot/interfaces/slash-data.interface';
+import { Collection, User } from 'discord.js';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { commandPropsDefault } from '@bot/default/command-props.default';
-import { SlashCommandBuilder } from '@discordjs/builders';
 import { Cooldown } from '@bot/interfaces/cooldown.interface';
-import { createCommand } from '@bot/utils/slash-command.util';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
 
 
 export abstract class Command<T extends Bot> {
 
     client: T;
-    data: SlashCommandBuilder;
+    data: SlashData;
 
     aliases?: string[];
     cooldown: Cooldown;
@@ -34,7 +33,7 @@ export abstract class Command<T extends Bot> {
         this.aliases = props.aliases;
         this.cooldown = props.cooldown;
         this.global = props.global;
-        this.data = createCommand(props.data);
+        this.data = props.data;
         this.cooldown.users = new Collection();
     }
 

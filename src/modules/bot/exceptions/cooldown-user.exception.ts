@@ -17,6 +17,7 @@ export class CooldownException extends Exception {
         ctx: CommandContext
     ) {
         super();
+
         this.command = command;
         this.ctx = ctx;
         this.message = `O usuário ${this.ctx.author.username} ` +

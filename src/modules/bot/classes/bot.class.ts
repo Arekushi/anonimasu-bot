@@ -105,7 +105,7 @@ export abstract class Bot extends Client {
 
     private setupCommand(command: Command<Bot>): void {
         this.#commands.set(command.data.name, command);
-        this.#commandsJSON.push(command.data.toJSON());
+        this.#commandsJSON.push(command.data);
 
         command.aliases.forEach(aliase => {
             this.aliases.set(aliase, command.data.name);

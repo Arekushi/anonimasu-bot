@@ -5,6 +5,7 @@ import { CooldownException } from '@bot/exceptions/cooldown-user.exception';
 import { Command } from '@bot/classes/command.class';
 import { Aspect, AspectContext } from '@arekushii/ts-aspect';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
+import { User } from 'discord.js';
 
 
 export class CheckCommandUsageAspect implements Aspect {
@@ -13,9 +14,11 @@ export class CheckCommandUsageAspect implements Aspect {
         const command: Command<Bot> = ctx.target;
         const cmdCtx: CommandContext = ctx.functionParams[0];
 
-        cmdCtx.author = cmdCtx.message?.author ?? cmdCtx.interaction?.user;
-        const authorId = cmdCtx.author.id;
+        const author = this.getAuthor(cmdCtx);
+        const authorId = author.id;
         const cmdMoment = command.cooldown.users.get(authorId);
+
+        cmdCtx.author = author;
 
         if (cmdMoment) {
             if (moment().isBefore(cmdMoment)) {
@@ -26,5 +29,9 @@ export class CheckCommandUsageAspect implements Aspect {
         }
 
         return [cmdCtx];
+    }
+
+    private getAuthor(cmdCtx: CommandContext): User {
+        return cmdCtx.message?.author ?? cmdCtx.interaction?.user;
     }
 }

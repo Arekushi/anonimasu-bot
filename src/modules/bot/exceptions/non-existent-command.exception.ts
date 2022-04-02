@@ -1,3 +1,4 @@
+import { CommandContext } from '@bot/interfaces/command-context.interface';
 import { reply } from '@bot/functions/communication.function';
 import { ExceptionContext } from '@core/interfaces/exception-context';
 import { Bot } from '@bot/classes/bot.class';
@@ -15,10 +16,11 @@ export class NonExistentCommandException extends Exception {
 
     @UseAspect(Advice.After, LogExceptionAspect)
     async action(ctx: ExceptionContext<Bot>): Promise<void> {
-        const message: Message = ctx.args[0];
-        const content = `Esse comando eu não conheço, o que quis dizer com: ${message.content}?`;
+        const cmdCtx: CommandContext = ctx.args[0];
+        const message: Message = cmdCtx.message;
+        const content = `Esse comando eu não conheço, o que quis dizer com: [${message.content}]?`;
         this.message = content;
 
-        reply({ message }, { content });
+        reply(cmdCtx, { content });
     }
 }

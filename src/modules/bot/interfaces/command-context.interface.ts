@@ -5,5 +5,10 @@ export interface CommandContext {
     message?: Message;
     interaction?: CommandInteraction;
     author?: User;
-    args?: any[];
+    options?: Option[];
+}
+
+export interface Option {
+    name: string;
+    value: any;
 }

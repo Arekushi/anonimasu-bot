@@ -6,22 +6,23 @@ import { LogCommandAspect } from '@bot/aspects/log-command.aspect';
 import { CheckCommandUsageAspect } from '@bot/aspects/check-command-usage.aspect';
 import { Bot } from '@bot/classes/bot.class';
 import { CommandProps } from '@bot/interfaces/command-props.interface';
-import { Message, MessageOptions, MessagePayload, CommandInteraction, Interaction, Collection } from 'discord.js';
+import { CommandInteraction, Interaction, Collection, User } from 'discord.js';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { commandPropsDefault } from '@bot/default/command-props.default';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Cooldown } from '@bot/interfaces/cooldown.interface';
 import { createCommand } from '@bot/utils/slash-command.util';
+import { CommandContext } from '@bot/interfaces/command-context.interface';
 
 
 export abstract class Command<T extends Bot> {
 
     client: T;
+    data: SlashCommandBuilder;
+
     aliases?: string[];
     cooldown: Cooldown;
     global: boolean;
-
-    data: SlashCommandBuilder;
 
     constructor(
         client: T,
@@ -34,46 +35,31 @@ export abstract class Command<T extends Bot> {
         this.cooldown = props.cooldown;
         this.global = props.global;
         this.data = createCommand(props.data);
-
         this.cooldown.users = new Collection();
     }
 
-    protected abstract action(message: Message, args: string[]): Promise<void>;
-
-    async respond(
-        message: Message,
-        options: string | MessagePayload | MessageOptions
-    ): Promise<Message> {
-        return await message.channel.send(options);
-    }
+    protected abstract action(ctx: CommandContext): Promise<void>;
 
     @UseAspect(Advice.Before, CheckCommandUsageAspect)
     @UseAspect(Advice.After, LogCommandAspect)
-    async run(
-        message: Message,
-        args: string[]
-    ): Promise<void> {
+    async run(ctx: CommandContext): Promise<void> {
         setTimeout(async () => {
             try {
-                this.action(message, args)
-                    .then(() => {
-                        if (this.cooldown.toUse > 0) {
-                            this.startCooldown(message);
-                        }
-                    })
-                    .catch((err) => {
-                        runException(err, this.client, message);
-                    });
+                await this.action(ctx);
             } catch (e) {
-                await runException(e, this.client, message);
+                await runException(e, this.client, ctx);
+            } finally {
+                this.startCooldown(ctx.author);
             }
         }, this.cooldown.reply);
     }
 
-    startCooldown(message: Message): void {
-        this.cooldown.users.set(
-            message.author.id,
-            moment().add(this.cooldown.toUse, 'milliseconds')
-        );
+    startCooldown(author: User): void {
+        if (this.cooldown.toUse > 0) {
+            this.cooldown.users.set(
+                author.id,
+                moment().add(this.cooldown.toUse, 'milliseconds')
+            );
+        }
     }
 }

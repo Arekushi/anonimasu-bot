@@ -1,6 +1,7 @@
-import { Message } from 'discord.js';
+import { CommandContext } from '@bot/interfaces/command-context.interface';
 import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';
+import { reply } from '@bot/functions/communication.function';
 
 
 export class Ping extends Command<AnonimasuBot> {
@@ -17,7 +18,7 @@ export class Ping extends Command<AnonimasuBot> {
         });
     }
 
-    async action(message: Message, args: any[]): Promise<void> {
-        await this.respond(message, 'Pong');
+    async action(ctx: CommandContext): Promise<void> {
+        await reply(ctx, 'Pong');
     }
 }

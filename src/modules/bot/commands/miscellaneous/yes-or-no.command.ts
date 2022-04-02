@@ -1,10 +1,11 @@
-import { Message } from 'discord.js';
 import i18n from 'i18n';
 
 import { toArray } from '@core/utils/string.util';
 import { random50, randomElement } from '@core/utils/random.util';
 import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';
+import { CommandContext } from '@bot/interfaces/command-context.interface';
+import { reply } from '@bot/functions/communication.function';
 
 
 export class Ping extends Command<AnonimasuBot> {
@@ -21,9 +22,11 @@ export class Ping extends Command<AnonimasuBot> {
         });
     }
 
-    async action(message: Message, args: any[]): Promise<void> {
+    async action(ctx: CommandContext): Promise<void> {
         const result = random50() ? 'yes' : 'no';
         const array = toArray(i18n.__(`commands.yes_or_no.responses.${result}`));
-        await this.respond(message, randomElement(array));
+        const element = randomElement(array);
+
+        await reply(ctx, element);
     }
 }

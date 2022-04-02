@@ -1,4 +1,4 @@
-import { CheckInteractionUsageAspect } from '@bot/aspects/check-interaction-usage.aspect';
+import { CheckInteractionAspect } from '@bot/aspects/check-interaction.aspect';
 import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Event } from '@bot/classes/event.class';
 import { CommandInteraction } from 'discord.js';
@@ -16,12 +16,9 @@ export class InteractionCreateEvent extends Event<AnonimasuBot> {
         });
     }
 
-    @UseAspect(Advice.Before, CheckInteractionUsageAspect)
+    @UseAspect(Advice.Before, CheckInteractionAspect)
     async action(interaction: CommandInteraction): Promise<void> {
         const command = this.client.getCommand(interaction.commandName);
-
-        interaction.reply('Pong');
-
-        // command.run();
+        await command.run({ interaction });
     }
 }

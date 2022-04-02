@@ -22,6 +22,6 @@ export class MessageEvent extends Event<AnonimasuBot> {
         const args = getMessageArgs(this.client, message);
         const command = this.client.getCommand(args.shift());
 
-        command.run(message, args);
+        await command.run({ message, args });
     }
 }

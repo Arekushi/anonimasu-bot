@@ -6,7 +6,7 @@ import { Case } from '@bot/enums/string-case.enum';
 import { ToCaseParametersAspect } from '@core/aspects/to-case-parameters.aspect';
 import { getPropertyByIndex } from '@core/utils/object.util';
 import { getFiles } from '@bot/utils/file.util';
-import { Client, Collection, Message } from 'discord.js';
+import { Client, Collection } from 'discord.js';
 import { ExceptionActionAspect } from '@core/aspects/exception-action.aspect';
 import { Config } from '@bot/interfaces/config.interface';
 import { Command } from '@bot/classes/command.class';

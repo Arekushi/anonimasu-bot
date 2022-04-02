@@ -1,25 +1,29 @@
+import { CommandContext } from '@bot/interfaces/command-context.interface';
 import { Message } from 'discord.js';
 import { LogExceptionAspect } from '@core/aspects/log-exception.aspect';
 import { Exception } from '@core/classes/exception.class';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
+import { reply } from '@bot/functions/communication.function';
 
 
 export class ReplyUserException extends Exception {
-    discordMessage: Message;
+
+    ctx: CommandContext;
     replyMessage: string;
 
-    constructor(message: Message, msg: string) {
+    constructor(
+        ctx: CommandContext,
+        message: string
+    ) {
         super();
 
-        this.discordMessage = message;
-        this.replyMessage = `[${message.author.username}] - ${msg}`;
+        this.ctx = ctx;
+        this.replyMessage = `[${ctx.author.username}] - ${message}`;
         this.message = `${this.replyMessage} - ${new Date().toTimeString()}`;
     }
 
     @UseAspect(Advice.Before, LogExceptionAspect)
     async action(): Promise<void> {
-        this.discordMessage.reply({
-            content: this.replyMessage
-        });
+        reply(this.ctx, { content: this.replyMessage });
     }
 }

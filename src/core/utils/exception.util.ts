@@ -7,5 +7,7 @@ export const runException = async (e: any, target?: any, ...args: any[]): Promis
         await e.action({ target, args });
     } else if (e instanceof Error) {
         consola.error(e);
+    } else {
+        consola.error(e);
     }
 };

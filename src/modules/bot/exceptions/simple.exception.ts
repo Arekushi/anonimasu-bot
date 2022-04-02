@@ -5,10 +5,13 @@ import { UseAspect, Advice } from '@arekushii/ts-aspect';
 
 
 export class SimpleException extends Exception {
-    constructor(user: User, msg: string) {
-        super();
 
-        this.message = `[${user.username}] - ${msg} - ${new Date().toTimeString()}`;
+    constructor(
+        user: User,
+        message: string
+    ) {
+        super();
+        this.message = `[${user.username}] - ${message} - ${new Date().toTimeString()}`;
     }
 
     @UseAspect(Advice.Before, LogExceptionAspect)

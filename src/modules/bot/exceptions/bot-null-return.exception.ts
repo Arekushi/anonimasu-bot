@@ -1,3 +1,4 @@
+import { reply } from '@bot/functions/communication.function';
 import { Bot } from '@bot/classes/bot.class';
 import { ExceptionContext } from '@core/interfaces/exception-context';
 import { LogExceptionAspect } from '@core/aspects/log-exception.aspect';
@@ -20,8 +21,8 @@ export class BotNullReturnException extends Exception {
     async action(ctx: ExceptionContext<Bot>): Promise<void> {
         const message: Message = ctx.args[0];
         const content = `O método ${this.method} retornou um valor nulo.`;
-
         this.message = content;
-        message.reply({ content });
+
+        reply({ message }, { content });
     }
 }

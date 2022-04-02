@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { NullReturnAsyncAspect } from '@core/aspects/null-return-async.aspect';
 import { CheckPlayCommandUsageAspect } from '@bot/aspects/check-play-command-usage.aspect';
 import { BotNullReturnException } from '@bot/exceptions/bot-null-return.exception';
@@ -6,6 +5,7 @@ import { Music } from '@bot/interfaces/music.interface';
 import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
+import { CommandContext } from '@bot/interfaces/command-context.interface';
 import ytSearch from 'yt-search';
 import ytdl from 'ytdl-core';
 
@@ -25,7 +25,7 @@ export class Play extends Command<AnonimasuBot> {
     }
 
     @UseAspect(Advice.Before, CheckPlayCommandUsageAspect)
-    async action(message: Message, args: string[]): Promise<void> {
+    async action(ctx: CommandContext): Promise<void> {
         // const music = await this.getMusic(args);
         // const guildId = this.message.guild.id;
         // const hasQueue = this.client.musicPlayer.hasQueue(guildId);

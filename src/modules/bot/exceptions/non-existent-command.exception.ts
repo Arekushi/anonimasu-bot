@@ -20,6 +20,6 @@ export class NonExistentCommandException extends Exception {
         const content = `Esse comando eu não conheço, o que quis dizer com: [${message.content}]?`;
         this.message = content;
 
-        reply({ message }, { content });
+        reply({ operator: message }, { content });
     }
 }

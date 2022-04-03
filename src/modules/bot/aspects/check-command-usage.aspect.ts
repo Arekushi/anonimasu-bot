@@ -1,4 +1,3 @@
-import { ArgumentMissingException } from '@bot/exceptions/argument-missing.exception';
 import moment from 'moment';
 
 import { Bot } from '@bot/classes/bot.class';
@@ -6,7 +5,7 @@ import { CooldownException } from '@bot/exceptions/cooldown-user.exception';
 import { Command } from '@bot/classes/command.class';
 import { Aspect, AspectContext } from '@arekushii/ts-aspect';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
-import { User } from 'discord.js';
+import { Message, User } from 'discord.js';
 
 
 export class CheckCommandUsageAspect implements Aspect {
@@ -29,22 +28,14 @@ export class CheckCommandUsageAspect implements Aspect {
             }
         }
 
-        if (cmdCtx.interaction) {
-            command.data.options.forEach((o, i) => {
-                const name = o.name;
-                const value = cmdCtx.interaction.options.data[i]?.value;
-                const required = o.required;
-
-                if (required && !value) {
-                    throw new ArgumentMissingException(name);
-                }
-            });
-        }
-
         return [cmdCtx];
     }
 
     private getAuthor(cmdCtx: CommandContext): User {
-        return cmdCtx.message?.author ?? cmdCtx.interaction?.user;
+        if (cmdCtx.operator instanceof Message) {
+            return cmdCtx.operator.author;
+        } else {
+            return cmdCtx.operator.user;
+        }
     }
 }

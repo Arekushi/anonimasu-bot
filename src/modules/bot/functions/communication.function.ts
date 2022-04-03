@@ -6,6 +6,5 @@ export const reply = async (
     ctx: CommandContext,
     options: string | MessagePayload | MessageOptions | InteractionReplyOptions
 ): Promise<any> => {
-    const obj = ctx.message ?? ctx.interaction;
-    return await obj.reply(options);
+    return await ctx.operator.reply(options);
 };

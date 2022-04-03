@@ -1,74 +1,69 @@
-import ytdl from 'ytdl-core';
-import { Music } from '@bot/interfaces/music.interface';
-import { MusicQueue } from '@bot/interfaces/music-queue.interface';
-import { Collection, Message } from 'discord.js';
-
-import {
-    AudioPlayer,
-    createAudioPlayer,
-    createAudioResource,
-    StreamType,
-    VoiceConnection,
-} from '@discordjs/voice';
+import { BotNullReturnException } from '@bot/exceptions/bot-null-return.exception';
+import { NullReturnAsyncAspect } from '@core/aspects/null-return-async.aspect';
+import { UseAspect, Advice } from '@arekushii/ts-aspect';
+import { GuildMember, User } from 'discord.js';
+import { Operator } from '@bot/types/operator.type';
+import { Player, Queue, Track, QueryType } from 'discord-player';
+import { Bot } from '@bot/classes/bot.class';
+import { player } from '@bot/default/player.default';
 
 
 export class MusicPlayer {
-    #queues: Collection<string, MusicQueue>;
-    #audioPlayer: AudioPlayer;
 
-    constructor() {
-        this.#queues = new Collection();
-        this.#audioPlayer = createAudioPlayer();
+    #client: Bot;
+    #player: Player;
+
+    constructor(
+        client: Bot
+    ) {
+        this.#client = client;
+        this.#player = player(client);
     }
 
-    public hasQueue(guild: string): boolean {
-        return this.#queues.has(guild);
+    public hasQueue(guildId: string): boolean {
+        return this.#player.queues.has(guildId);
     }
 
-    public getQueue(guild: string): MusicQueue {
-        return this.#queues.get(guild);
+    public getQueue(guildId: string): Queue {
+        return this.#player.queues.get(guildId);
     }
 
-    public addMusic(guild: string, music: Music): void {
-        const musicQueue = this.#queues.get(guild);
-        musicQueue.musics.push(music);
+    public async addMusic(
+        guildId: string,
+        music: string,
+        author: User
+    ): Promise<void> {
+        const queue = this.getQueue(guildId);
+        const track = await this.getTrack(music, author);
+
+        queue.addTrack(track);
     }
 
-    public startQueue(message: Message, connection: VoiceConnection): void {
-        const musicQueue = {
-            textChannel: message.channel,
-            voiceChannel: message.member.voice.channel,
-            connection,
-            musics: []
-        };
+    public async createQueue(operator: Operator): Promise<void> {
+        const queue = this.#player.createQueue(operator.guild, {
+            metadata: {
+                textChannel: operator.channel
+            },
+        });
 
-        this.#queues.set(message.guild.id, musicQueue);
-        musicQueue.connection.subscribe(this.#audioPlayer);
+        await queue.connect((operator.member as GuildMember).voice.channel);
     }
 
-    public endQueue(guild: string): void {
-        this.#queues.delete(guild);
+    public async play(guildId: string): Promise<void> {
+        const queue = this.getQueue(guildId);
+
+        if (!queue.playing) {
+            await queue.play();
+        }
     }
 
-    public async playMusic(guid: string, music: Music): Promise<void> {
-        const songQueued = this.#queues.get(guid);
+    @UseAspect(Advice.AfterReturn, NullReturnAsyncAspect, new BotNullReturnException('getTrack'))
+    public async getTrack(args: string, user: User): Promise<Track> {
+        const track = await this.#player.search(args, {
+            requestedBy: user,
+            searchEngine: QueryType.AUTO
+        });
 
-        // if (!songQueued) {
-        //     this.leaveVoiceChannel();
-        //     this.queues.delete(guid);
-        //     return;
-        // }
-
-        const stream = ytdl(music.url, { filter: 'audioonly' });
-        const audio = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-        this.#audioPlayer.play(audio);
-    }
-
-    public pauseSong(): void {
-
-    }
-
-    public stop(): void {
-
+        return track.tracks[0];
     }
 }

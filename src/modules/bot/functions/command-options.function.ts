@@ -1,12 +1,13 @@
 import toBoolean from 'to-boolean';
 
-import { CommandOptionType } from '@bot/enums/command-option-type.enum';
 import { empty } from '@core/utils/object.util';
+import { CommandInteraction } from 'discord.js';
+import { CommandOptionType } from '@bot/enums/command-option-type.enum';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
 
 
 export const get = <T>(ctx: CommandContext, name: string, defaultValue?: T): T => {
-    const value = getValue(ctx.options ?? ctx.interaction?.options, name);
+    const value = getValue(ctx.options ?? (ctx.operator as CommandInteraction).options, name);
 
     return [value, defaultValue].filter(i => {
         return !empty(i);

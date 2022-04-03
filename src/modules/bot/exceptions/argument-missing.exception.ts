@@ -19,6 +19,6 @@ export class ArgumentMissingException extends Exception {
     @UseAspect(Advice.Before, LogExceptionAspect)
     async action(ctx: ExceptionContext<Bot>): Promise<void> {
         const message: Message = ctx.args[0];
-        reply({ message }, { content: this.message });
+        reply({ operator: message }, { content: this.message });
     }
 }

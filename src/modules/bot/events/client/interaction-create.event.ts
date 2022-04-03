@@ -19,6 +19,6 @@ export class InteractionCreateEvent extends Event<AnonimasuBot> {
     @UseAspect(Advice.Before, CheckInteractionAspect)
     async action(interaction: CommandInteraction): Promise<void> {
         const command = this.client.getCommand(interaction.commandName);
-        await command.run({ interaction });
+        await command.run({ operator: interaction });
     }
 }

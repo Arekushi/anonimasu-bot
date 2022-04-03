@@ -1,9 +1,9 @@
-import { Message, CommandInteraction, User } from 'discord.js';
+import { Operator } from '@bot/types/operator.type';
+import { User } from 'discord.js';
 
 
 export interface CommandContext {
-    message?: Message;
-    interaction?: CommandInteraction;
+    operator?: Operator;
     author?: User;
     options?: Option[];
 }

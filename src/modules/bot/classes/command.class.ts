@@ -1,17 +1,18 @@
 import moment from 'moment';
 
+import { Collection, User } from 'discord.js';
+import { UseAspect, Advice } from '@arekushii/ts-aspect';
+import { Bot } from '@bot/classes/bot.class';
 import { merge } from '@core/utils/object.util';
 import { runException } from '@core/utils/exception.util';
 import { LogCommandAspect } from '@bot/aspects/log-command.aspect';
 import { CheckCommandUsageAspect } from '@bot/aspects/check-command-usage.aspect';
-import { Bot } from '@bot/classes/bot.class';
 import { CommandProps } from '@bot/interfaces/command-props.interface';
 import { SlashData } from '@bot/interfaces/slash-data.interface';
-import { Collection, User } from 'discord.js';
-import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { commandPropsDefault } from '@bot/default/command-props.default';
 import { Cooldown } from '@bot/interfaces/cooldown.interface';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
+import { configData } from '@bot/functions/slash-data.function';
 
 
 export abstract class Command<T extends Bot> {
@@ -33,7 +34,7 @@ export abstract class Command<T extends Bot> {
         this.aliases = props.aliases;
         this.cooldown = props.cooldown;
         this.global = props.global;
-        this.data = props.data;
+        this.data = configData(props.data);
         this.cooldown.users = new Collection();
     }
 

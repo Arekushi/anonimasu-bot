@@ -1,31 +1,17 @@
-import { ArgumentMissingException } from '@bot/exceptions/argument-missing.exception';
-import { Option, CommandContext } from '@bot/interfaces/command-context.interface';
-import { SlashOption } from '@bot/interfaces/slash-options.interface';
+import { empty } from '@core/utils/object.util';
+import { CommandContext } from '@bot/interfaces/command-context.interface';
 
 
-export const getOptions = (
-    slashOptions: SlashOption[],
-    args: any[]
-): Option[] => {
-    return slashOptions.map((o, i) => {
-        const name = o.name;
-        const value = args[i];
-        const required = o.required;
-
-        if (required && !value) {
-            throw new ArgumentMissingException(name);
-        }
-
-        return { name, value };
-    });
-};
-
-export const get = <T>(ctx: CommandContext, name: string): T => {
+export const get = (ctx: CommandContext, name: string, defaultValue?: any): any => {
     const msgOptions = ctx.options;
     const interactionOptions = ctx.interaction?.options;
 
-    const msgOption = msgOptions?.find(o => o.name === name).value;
-    const interactionOption = interactionOptions?.get(name).value;
+    const msgValue = msgOptions?.find(o => o.name === name)?.value;
+    const interactionValue = (interactionOptions?.get(name)?.value) as any;
 
-    return msgOption ?? interactionOption;
+    const result = [msgValue, interactionValue, defaultValue].filter(i => {
+        return !empty(i);
+    })[0];
+
+    return result;
 };

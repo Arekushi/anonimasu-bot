@@ -16,11 +16,10 @@ export class NonExistentCommandException extends Exception {
 
     @UseAspect(Advice.After, LogExceptionAspect)
     async action(ctx: ExceptionContext<Bot>): Promise<void> {
-        const cmdCtx: CommandContext = ctx.args[0];
-        const message: Message = cmdCtx.message;
+        const message: Message = ctx.args[0];
         const content = `Esse comando eu não conheço, o que quis dizer com: [${message.content}]?`;
         this.message = content;
 
-        reply(cmdCtx, { content });
+        reply({ message }, { content });
     }
 }

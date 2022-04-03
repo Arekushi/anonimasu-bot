@@ -7,4 +7,3 @@ export const slashDataDefault: SlashData = {
     defaultPermission: true,
     options: []
 };
-

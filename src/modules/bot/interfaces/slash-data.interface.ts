@@ -6,4 +6,5 @@ export interface SlashData {
     description: string;
     defaultPermission?: boolean;
     options?: SlashOption[];
+    aliases?: string[];
 }

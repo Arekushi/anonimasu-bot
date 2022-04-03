@@ -4,16 +4,28 @@ export const getPropertyByIndex = (obj: any, index = 0): any => {
 
 export const merge = (target: any, source: any) => {
     for (const key of Object.keys(source)) {
-      try {
-        if (source[key] instanceof Object) {
-          target[key] = merge(target[key], source[key]);
-        } else if (!target[key]) {
-          target[key] = source[key];
+        try {
+            if (source[key] instanceof Object) {
+                target[key] = merge(target[key], source[key]);
+            } else if (!target[key]) {
+                target[key] = source[key];
+            }
+        } catch (e) {
+            target[key] = source[key];
         }
-      } catch (e) {
-        target[key] = source[key];
-      }
     }
 
-    return target;
+    return target ?? source;
+};
+
+export const empty = (obj: any) => {
+    switch (obj) {
+        case '':
+        case null:
+        case undefined:
+        case typeof(obj) === 'undefined':
+            return true;
+        default:
+            return false;
+    }
 };

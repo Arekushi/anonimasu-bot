@@ -6,6 +6,7 @@ import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
 import { reply } from '@bot/functions/communication.function';
+import { CommandOptionType } from '@bot/enums/command-option-type.enum';
 
 
 export class Ping extends Command<AnonimasuBot> {
@@ -16,7 +17,15 @@ export class Ping extends Command<AnonimasuBot> {
         super(client, {
             data: {
                 name: 'question',
-                description: 'Make a question'
+                description: 'Make a question',
+                options: [
+                    {
+                        name: 'question',
+                        description: 'Uma pergunta fechada',
+                        type: CommandOptionType.STRING,
+                        required: true
+                    }
+                ]
             },
             aliases: ['qt']
         });

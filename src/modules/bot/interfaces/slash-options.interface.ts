@@ -5,6 +5,7 @@ export interface SlashOption {
     name: string;
     description: string;
     type: CommandOptionType;
+    alias?: string;
     required?: boolean;
     autocomplete?: boolean;
     choices?: Choice[];

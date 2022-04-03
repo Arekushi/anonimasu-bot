@@ -6,6 +6,6 @@ import { CommandProps } from '@bot/interfaces/command-props.interface';
 export const commandPropsDefault: CommandProps = {
     data: slashDataDefault,
     cooldown: defaultCooldown,
-    aliases: [],
-    global: true
+    global: true,
+    aliases: []
 };

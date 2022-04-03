@@ -1,3 +1,4 @@
+import { ArgumentMissingException } from '@bot/exceptions/argument-missing.exception';
 import moment from 'moment';
 
 import { Bot } from '@bot/classes/bot.class';
@@ -26,6 +27,18 @@ export class CheckCommandUsageAspect implements Aspect {
             } else {
                 command.cooldown.users.delete(authorId);
             }
+        }
+
+        if (cmdCtx.interaction) {
+            command.data.options.forEach((o, i) => {
+                const name = o.name;
+                const value = cmdCtx.interaction.options.data[i]?.value;
+                const required = o.required;
+
+                if (required && !value) {
+                    throw new ArgumentMissingException(name);
+                }
+            });
         }
 
         return [cmdCtx];

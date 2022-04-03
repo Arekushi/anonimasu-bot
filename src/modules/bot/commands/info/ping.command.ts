@@ -1,4 +1,4 @@
-import { get } from '@bot/functions/options.function';
+import { get } from '@bot/functions/command-options.function';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
 import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';

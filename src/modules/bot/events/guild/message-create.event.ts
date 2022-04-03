@@ -4,7 +4,7 @@ import { CheckMessageAspect } from '@bot/aspects/check-message.aspect';
 import { Event } from '@bot/classes/event.class';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { getMessageArgs } from '@bot/utils/message.util';
-import { getOptions } from '@bot/functions/slash-data.function';
+import { createOptions } from '@bot/functions/slash-data.function';
 
 
 export class MessageEvent extends Event<AnonimasuBot> {
@@ -23,7 +23,7 @@ export class MessageEvent extends Event<AnonimasuBot> {
         const args = getMessageArgs(this.client.config.prefix, message);
         const command = this.client.getCommand(args.shift());
 
-        const options = getOptions(command.data, args);
+        const options = createOptions(command.data, args);
         await command.run({ message, options });
     }
 }

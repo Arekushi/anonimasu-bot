@@ -23,7 +23,6 @@ export const empty = (obj: any) => {
         case '':
         case null:
         case undefined:
-        case typeof(obj) === 'undefined':
             return true;
         default:
             return false;

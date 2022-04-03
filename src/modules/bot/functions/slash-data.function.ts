@@ -1,6 +1,6 @@
+import { convertValue } from '@bot/functions/command-options.function';
 import { compare } from '@core/utils/string.util';
 import { ArgumentMissingException } from '@bot/exceptions/argument-missing.exception';
-import { Option } from '@bot/interfaces/command-context.interface';
 import { SlashData } from '@bot/interfaces/slash-data.interface';
 
 
@@ -13,69 +13,65 @@ export const configData = (data: SlashData): SlashData => {
         return option.alias;
     });
 
+    data.singleRequired = data.options.filter(o => {
+        return o.required;
+    }).length <= 1;
+
     return data;
 };
 
-export const getOptions = (
-    data: SlashData,
-    args: string[]
-): Option[] => {
-    const separatedArgs = separateArgs(data, args);
-
-    return separatedArgs.map(arg => {
-        const option = arg.option;
-        const value = arg.value;
-        const name = option.name;
-        const required = option.required;
-
-        if (required && !value) {
-            throw new ArgumentMissingException(name);
-        }
-
-        return { name, value };
-    });
-};
-
-const separateArgs = (
+export const createOptions = (
     data: SlashData,
     args: string[]
 ): any[] => {
     const results = [];
-    const aliases = data.aliases;
-    const options = data.options;
+    const { options } = data;
 
     options.forEach(option => {
-        results.push({
-            values: [],
+        const result = {
             value: undefined,
-            option
-        });
+            name: option.name
+        };
 
-        let adding = false;
-        const result = results.at(-1);
-        const alias = result.option.alias;
+        const values = getValues(data, option.alias, args);
+        result.value = convertValue(values, option.type);
 
-        const hasAlias = args.includes(alias);
-        const singleRequired = options.filter(o => o.required).length <= 1;
-
-        for (const arg of args) {
-            if (compare(arg, alias)) {
-                adding = true;
-            } else if ((singleRequired && !hasAlias) || adding) {
-                if (aliases.includes(arg)) {
-                    break;
-                }
-
-                result.values.push(arg);
-            }
+        if (option.required && !result.value) {
+            throw new ArgumentMissingException(result.name);
         }
 
-        result.value = result.values.join(' ');
-
         args = args.filter(arg => {
-            return !result.values.includes(arg);
+            return !values.includes(arg);
         });
+
+        results.push(result);
     });
 
     return results;
+};
+
+const getValues = (
+    data: SlashData,
+    alias: string,
+    args: string[]
+): string[] => {
+    let adding = false;
+
+    const values = [];
+    const hasAlias = args.includes(alias);
+    const { aliases, singleRequired } = data;
+
+    for (const arg of args) {
+        if (compare(arg, alias)) {
+            adding = true;
+        } else if ((singleRequired && !hasAlias) || adding) {
+            if (aliases.includes(arg)) {
+                break;
+            }
+
+            values.push(arg);
+        }
+    }
+
+    return values;
 };

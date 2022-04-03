@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { Collection, User } from 'discord.js';
+import { User } from 'discord.js';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { Bot } from '@bot/classes/bot.class';
 import { merge } from '@core/utils/object.util';
@@ -35,7 +35,6 @@ export abstract class Command<T extends Bot> {
         this.cooldown = props.cooldown;
         this.global = props.global;
         this.data = configData(props.data);
-        this.cooldown.users = new Collection();
     }
 
     protected abstract action(ctx: CommandContext): Promise<void>;

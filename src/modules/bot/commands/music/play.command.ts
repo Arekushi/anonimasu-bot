@@ -10,7 +10,7 @@ import { Command } from '@bot/classes/command.class';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
 import { CommandOptionType } from '@bot/enums/command-option-type.enum';
-import { get } from '@bot/functions/options.function';
+import { get } from '@bot/functions/command-options.function';
 import { reply } from '@bot/functions/communication.function';
 
 

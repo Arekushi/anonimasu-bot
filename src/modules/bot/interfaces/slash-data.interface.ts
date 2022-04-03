@@ -7,4 +7,5 @@ export interface SlashData {
     defaultPermission?: boolean;
     options?: SlashOption[];
     aliases?: string[];
+    singleRequired?: boolean;
 }

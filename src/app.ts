@@ -23,7 +23,7 @@ export class App {
 
         this.use();
         this.routes();
-        this.database();
+        // this.database();
     }
 
     private routes(): void {

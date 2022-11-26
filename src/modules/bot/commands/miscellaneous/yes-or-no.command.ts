@@ -6,10 +6,10 @@ import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
 import { reply } from '@bot/functions/communication.function';
-import { CommandOptionType } from '@bot/enums/command-option-type.enum';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js';
 
 
-export class Ping extends Command<AnonimasuBot> {
+export class YesNoCommand extends Command<AnonimasuBot> {
 
     constructor(
         client: AnonimasuBot
@@ -17,13 +17,15 @@ export class Ping extends Command<AnonimasuBot> {
         super(client, {
             data: {
                 name: 'question',
+                type: ApplicationCommandType.ChatInput,
                 description: 'Make a question',
                 options: [
                     {
                         name: 'question',
                         description: 'Uma pergunta fechada',
-                        type: CommandOptionType.STRING,
-                        required: true
+                        type: ApplicationCommandOptionType.String,
+                        required: true,
+                        aliases: ['q']
                     }
                 ]
             },
@@ -32,6 +34,7 @@ export class Ping extends Command<AnonimasuBot> {
     }
 
     async action(ctx: CommandContext): Promise<void> {
+        console.log(ctx.options);
         const result = random50() ? 'yes' : 'no';
         const array = toArray(i18n.__(`commands.yes_or_no.responses.${result}`));
         const element = randomElement(array);

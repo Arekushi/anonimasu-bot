@@ -1,15 +1,14 @@
-import { Intents } from 'discord.js';
+import { GatewayIntentBits  } from 'discord.js';
 
-
-const FLAGS = Intents.FLAGS;
 
 export const intents = [
-    FLAGS.GUILDS,
-    FLAGS.DIRECT_MESSAGES,
-    FLAGS.DIRECT_MESSAGE_REACTIONS,
-    FLAGS.GUILD_INVITES,
-    FLAGS.GUILD_VOICE_STATES,
-    FLAGS.GUILD_MEMBERS,
-    FLAGS.GUILD_MESSAGES,
-    FLAGS.GUILD_PRESENCES
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.DirectMessageReactions,
+    GatewayIntentBits.DirectMessageTyping,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildInvites,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildPresences
 ];

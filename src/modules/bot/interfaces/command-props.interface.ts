@@ -1,9 +1,9 @@
 import { Cooldown } from '@bot/interfaces/cooldown.interface';
-import { SlashData } from '@bot/interfaces/slash-data.interface';
+import { SlashCommandData } from '@src/modules/bot/interfaces/slash-command-data.interface';
 
 
 export interface CommandProps {
-    data: SlashData;
+    data: SlashCommandData;
     cooldown?: Cooldown;
     aliases?: string[];
     global?: boolean;

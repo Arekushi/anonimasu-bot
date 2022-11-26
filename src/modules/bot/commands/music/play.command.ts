@@ -3,9 +3,8 @@ import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Command } from '@bot/classes/command.class';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
-import { CommandOptionType } from '@bot/enums/command-option-type.enum';
-import { get } from '@bot/functions/command-options.function';
 import { reply } from '@bot/functions/communication.function';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js';
 
 
 export class Play extends Command<AnonimasuBot> {
@@ -16,14 +15,15 @@ export class Play extends Command<AnonimasuBot> {
         super(client, {
             data: {
                 name: 'play',
+                type: ApplicationCommandType.ChatInput,
                 description: 'Comando para dar play em alguma música.',
                 options: [
                     {
                         name: 'music',
                         description: 'Uma URL ou nome de uma música (Youtube)',
-                        type: CommandOptionType.STRING,
-                        required: true,
-                        alias: '-m'
+                        type: ApplicationCommandOptionType.String,
+                        required: false,
+                        aliases: ['m']
                     }
                 ]
             },
@@ -33,7 +33,7 @@ export class Play extends Command<AnonimasuBot> {
 
     @UseAspect(Advice.Before, CheckPlayCommandUsageAspect)
     async action(ctx: CommandContext): Promise<void> {
-        const music = get<string>(ctx, 'music');
+        const music = this.get<string>(ctx, 'music');
         const guildId = ctx.operator.guildId;
         const player = this.client.musicPlayer;
         const hasQueue = player.hasQueue(guildId);

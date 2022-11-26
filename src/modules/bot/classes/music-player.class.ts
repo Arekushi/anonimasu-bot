@@ -1,8 +1,8 @@
+import { Operator } from '@bot/types/operator.type';
 import { BotNullReturnException } from '@bot/exceptions/bot-null-return.exception';
 import { NullReturnAsyncAspect } from '@core/aspects/null-return-async.aspect';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { GuildMember, User } from 'discord.js';
-import { Operator } from '@bot/types/operator.type';
 import { Player, Queue, Track, QueryType } from 'discord-player';
 import { Bot } from '@bot/classes/bot.class';
 import { player } from '@bot/default/player.default';

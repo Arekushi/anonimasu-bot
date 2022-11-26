@@ -13,3 +13,11 @@ export const remove = (array: any[], item: any): void => {
         array.splice(index, 1);
     }
 };
+
+export const isEmpty = (array: any[]): boolean => {
+    if (Array.isArray(array) && array.length) {
+        return false;
+    } else {
+        return true;
+    }
+};

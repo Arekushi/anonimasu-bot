@@ -10,6 +10,7 @@ export abstract class Event<T extends Bot> {
     client: T;
     name: string;
     once: boolean;
+    rest: boolean;
 
     constructor(
         client: T,
@@ -20,6 +21,7 @@ export abstract class Event<T extends Bot> {
         this.client = client;
         this.name = props.name;
         this.once = props.once;
+        this.rest = props.rest;
     }
 
     async run(...args: any[]): Promise<void> {

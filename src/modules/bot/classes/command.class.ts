@@ -1,24 +1,25 @@
 import moment from 'moment';
+import config from 'config';
 
-import { User } from 'discord.js';
+import { User, CommandInteraction } from 'discord.js';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { Bot } from '@bot/classes/bot.class';
-import { merge } from '@core/utils/object.util';
+import { merge, isEmpty } from '@core/utils/object.util';
 import { runException } from '@core/utils/exception.util';
 import { LogCommandAspect } from '@bot/aspects/log-command.aspect';
 import { CheckCommandUsageAspect } from '@bot/aspects/check-command-usage.aspect';
 import { CommandProps } from '@bot/interfaces/command-props.interface';
-import { SlashData } from '@bot/interfaces/slash-data.interface';
+import { SlashCommandData } from '@src/modules/bot/interfaces/slash-command-data.interface';
 import { commandPropsDefault } from '@bot/default/command-props.default';
 import { Cooldown } from '@bot/interfaces/cooldown.interface';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
-import { configData } from '@bot/functions/slash-data.function';
+import { isEqual } from '@core/utils/string.util';
 
 
 export abstract class Command<T extends Bot> {
 
     client: T;
-    data: SlashData;
+    data: SlashCommandData;
 
     aliases?: string[];
     cooldown: Cooldown;
@@ -34,10 +35,48 @@ export abstract class Command<T extends Bot> {
         this.aliases = props.aliases;
         this.cooldown = props.cooldown;
         this.global = props.global;
-        this.data = configData(props.data);
+        this.data = props.data;
+
+        this.setup();
     }
 
     protected abstract action(ctx: CommandContext): Promise<void>;
+
+    private setup(): void {
+        this.data.options.sort((a, b) => {
+            return (a.required === b.required) ? 0 : a.required ? -1 : 1;
+        });
+
+        this.data.options = this.data.options?.map(option => {
+            option.aliases = option.aliases?.map(alias => {
+                return `${config.get('alias-prefix')}${alias.replace(/\W/g, '')}`;
+            }) ?? [];
+
+            return option;
+        });
+    }
+
+    get<E>(
+        ctx: CommandContext,
+        name: string,
+        defaultValue?: E
+    ): E {
+        const value = this.getOptionValue(ctx, name);
+        return [value, defaultValue].filter(v => !isEmpty(v))[0];
+    }
+
+    private getOptionValue(
+        ctx: CommandContext,
+        name: string
+    ): any {
+        const options = (ctx.options ?? (ctx.operator as CommandInteraction).options);
+
+        if (Array.isArray(options)) {
+            return options.find(o => isEqual(o.name, name))?.value;
+        } else {
+            return options.get(name)?.value;
+        }
+    }
 
     @UseAspect(Advice.Before, CheckCommandUsageAspect)
     @UseAspect(Advice.After, LogCommandAspect)

@@ -10,7 +10,7 @@ export const toArray = (str: string): any[] => {
     return str as unknown as any[];
 };
 
-export const compare = (a: string, b: string): boolean => {
+export const isEqual = (a: string, b: string): boolean => {
     return a.localeCompare(b, undefined, { sensitivity: 'accent'}) === 0;
 };
 

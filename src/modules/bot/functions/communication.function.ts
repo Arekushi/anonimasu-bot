@@ -1,10 +1,14 @@
-import { MessagePayload, MessageOptions, InteractionReplyOptions } from 'discord.js';
+import { MessagePayload, InteractionReplyOptions, MessageReplyOptions, Message } from 'discord.js';
 import { CommandContext } from '@bot/interfaces/command-context.interface';
 
 
 export const reply = async (
     ctx: CommandContext,
-    options: string | MessagePayload | MessageOptions | InteractionReplyOptions
+    options?: string | MessagePayload | InteractionReplyOptions & MessageReplyOptions
 ): Promise<any> => {
-    return await ctx.operator.reply(options);
+    if (ctx.operator instanceof Message) {
+        ctx.operator.reply(options);
+    } else {
+        ctx.operator.reply(options);
+    }
 };

@@ -3,8 +3,8 @@ import { User } from 'discord.js';
 
 
 export interface CommandContext {
-    operator?: Operator;
     author?: User;
+    operator?: Operator;
     options?: Option[];
 }
 

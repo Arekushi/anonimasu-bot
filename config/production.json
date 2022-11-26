@@ -1,10 +1,6 @@
 {
     "port": "8787",
     "bot": {
-        "activity": {
-            "name": "日本語",
-            "type": "LISTENING"
-        },
         "rest-options": {
             "version": 10
         }

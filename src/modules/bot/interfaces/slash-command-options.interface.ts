@@ -1,11 +1,11 @@
-import { CommandOptionType } from '@bot/enums/command-option-type.enum';
+import { ApplicationCommandOptionType } from 'discord.js';
 
 
-export interface SlashOption {
+export interface SlashCommandOption {
     name: string;
     description: string;
-    type: CommandOptionType;
-    alias?: string;
+    type: ApplicationCommandOptionType;
+    aliases?: string[];
     required?: boolean;
     autocomplete?: boolean;
     choices?: Choice[];

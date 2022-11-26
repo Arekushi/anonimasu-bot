@@ -2,7 +2,7 @@ export const getPropertyByIndex = (obj: any, index = 0): any => {
     return obj[Object.keys(obj)[index]];
 };
 
-export const merge = (target: any, source: any) => {
+export const merge = (target: any, source: any): any => {
     for (const key of Object.keys(source)) {
         try {
             if (source[key] instanceof Object) {
@@ -18,7 +18,7 @@ export const merge = (target: any, source: any) => {
     return target ?? source;
 };
 
-export const empty = (obj: any) => {
+export const isEmpty = (obj: any): boolean => {
     switch (obj) {
         case '':
         case null:

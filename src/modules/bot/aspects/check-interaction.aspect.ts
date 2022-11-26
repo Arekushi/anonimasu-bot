@@ -1,6 +1,6 @@
 import { SimpleException } from '@bot/exceptions/simple.exception';
-import { Interaction, User } from 'discord.js';
 import { Aspect, AspectContext } from '@arekushii/ts-aspect';
+import { Interaction, User } from 'discord.js';
 
 
 export class CheckInteractionAspect implements Aspect {

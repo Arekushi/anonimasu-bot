@@ -20,7 +20,7 @@ export class CheckPlayCommandUsageAspect implements Aspect {
             );
         }
 
-        if (!permissions?.has('CONNECT') || !permissions.has('SPEAK')) {
+        if (!permissions?.has('Connect') || !permissions.has('Speak')) {
             throw new ReplyUserException(
                 cmdCtx, 'Você não tem as permissões necessárias!'
             );

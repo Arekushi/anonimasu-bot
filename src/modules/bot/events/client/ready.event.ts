@@ -1,9 +1,8 @@
-import config from 'config';
-
 import { AnonimasuBot } from '@bot/client/anonimasu.bot';
 import { Event } from '@bot/classes/event.class';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { LogBotOnlineAspect } from '@bot/aspects/log-bot-online.aspect';
+import { activity } from '@bot/default/bot-activity.default';
 
 
 export class ReadyEvent extends Event<AnonimasuBot> {
@@ -13,12 +12,12 @@ export class ReadyEvent extends Event<AnonimasuBot> {
     ) {
         super(client, {
             name: 'ready',
-            once: false
+            once: true
         });
     }
 
     @UseAspect(Advice.Before, LogBotOnlineAspect)
     async action(): Promise<void> {
-        this.client.user.setActivity(config.get('bot.activity'));
+        this.client.user.setActivity(activity);
     }
 }

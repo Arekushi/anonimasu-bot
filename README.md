@@ -38,7 +38,7 @@ For the use of the project, some prerequisites will be necessary.
 
 ```toml
 TOKEN="token" # String: Discord bot token
-LIST_ENDPOINTS=False # Boolean: Whether endpoints will be presented on launch
+LIST_ENDPOINTS=false # Boolean: Whether endpoints will be presented on launch
 MONGODB_DATABASE="database_name"
 MONGODB_URL="mongodb+srv//..."
 MONGODB_USER="admin"

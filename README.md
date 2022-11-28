@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="#" target="blank">
-    <img src="https://i.imgur.com/Herlri9.png" width="200" alt="Nest Logo" style="border-radius: 50%" />
+    <img src="https://i.imgur.com/15oPI07.png" width="200" alt="Nest Logo" style="border-radius: 50%" />
   </a>
 </p>
 
@@ -38,7 +38,7 @@ For the use of the project, some prerequisites will be necessary.
 
 ```toml
 TOKEN="token" # String: Discord bot token
-LIST_ENDPOINTS=False | True # Boolean: Whether endpoints will be presented on launch
+LIST_ENDPOINTS=False # Boolean: Whether endpoints will be presented on launch
 MONGODB_DATABASE="database_name"
 MONGODB_URL="mongodb+srv//..."
 MONGODB_USER="admin"

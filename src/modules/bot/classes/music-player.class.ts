@@ -1,3 +1,4 @@
+import { CheckHasQueueAspect } from '@bot/aspects/check-has-queue.aspect';
 import { Operator } from '@bot/types/operator.type';
 import { BotNullReturnException } from '@bot/exceptions/bot-null-return.exception';
 import { NullReturnAsyncAspect } from '@core/aspects/null-return-async.aspect';
@@ -28,15 +29,20 @@ export class MusicPlayer {
         return this.#player.queues.get(guildId);
     }
 
+    @UseAspect(Advice.Before, CheckHasQueueAspect)
     public async addMusic(
-        guildId: string,
+        operator: Operator,
         music: string,
         author: User
     ): Promise<void> {
-        const queue = this.getQueue(guildId);
-        const track = await this.getTrack(music, author);
+        const queue = this.getQueue(operator.guildId);
+        const tracks = await this.getTracks(music, author);
 
-        queue.addTrack(track);
+        // for (const track of tracks) {
+        //     console.log(track.toJSON());
+        // }
+
+        queue.addTrack(tracks[0]);
     }
 
     public async createQueue(operator: Operator): Promise<void> {
@@ -58,12 +64,15 @@ export class MusicPlayer {
     }
 
     @UseAspect(Advice.AfterReturn, NullReturnAsyncAspect, new BotNullReturnException('getTrack'))
-    public async getTrack(args: string, user: User): Promise<Track> {
-        const track = await this.#player.search(args, {
+    public async getTracks(
+        query: string | Track,
+        user: User
+    ): Promise<Track[]> {
+        const result = await this.#player.search(query, {
             requestedBy: user,
             searchEngine: QueryType.AUTO
         });
 
-        return track.tracks[0];
+        return result.tracks;
     }
 }

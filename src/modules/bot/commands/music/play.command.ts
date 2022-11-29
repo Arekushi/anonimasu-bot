@@ -33,16 +33,11 @@ export class Play extends Command<AnonimasuBot> {
 
     @UseAspect(Advice.Before, CheckPlayCommandUsageAspect)
     async action(ctx: CommandContext): Promise<void> {
-        const music = this.get<string>(ctx, 'music');
+        const music = this.getOption<string>(ctx, 'music');
         const guildId = ctx.operator.guildId;
         const player = this.client.musicPlayer;
-        const hasQueue = player.hasQueue(guildId);
 
-        if (!hasQueue) {
-            await player.createQueue(ctx.operator);
-        }
-
-        await player.addMusic(guildId, music, ctx.author);
+        await player.addMusic(ctx.operator, music, ctx.author);
         await player.play(guildId);
 
         reply(ctx, `Tocando a música: ${music}`);

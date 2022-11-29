@@ -1,7 +1,7 @@
 
 import config from 'config';
 
-import { REST, Client, Collection } from 'discord.js';
+import { REST, Client, Collection, ClientOptions } from 'discord.js';
 import { NonExistentCommandException } from '@bot/exceptions/non-existent-command.exception';
 import { NullReturnAspect } from '@core/aspects/null-return.aspect';
 import { Case } from '@bot/enums/string-case.enum';
@@ -15,8 +15,6 @@ import { Event } from '@bot/classes/event.class';
 import { UseAspect, Advice } from '@arekushii/ts-aspect';
 import { LogSlashCommandsAspect } from '@bot/aspects/log-slash-commands.aspect';
 import { LogSetupAspect } from '@bot/aspects/log-setup.aspect';
-import { intents } from '@bot/default/bot-intents.default';
-import { partials } from '@bot/default/bot-partials.default';
 import { guildCommands } from '@bot/functions/rest-api.function';
 
 
@@ -54,11 +52,10 @@ export abstract class Bot extends Client {
         return this.#restAPI;
     }
 
-    constructor() {
-        super({
-            intents,
-            partials
-        });
+    constructor(
+        options: ClientOptions
+    ) {
+        super(options);
 
         this.#commands = new Collection();
         this.#commandsJSON = [];
@@ -98,7 +95,7 @@ export abstract class Bot extends Client {
                 const instance = new request(this);
 
                 if (instance instanceof Command) {
-                    this.setupCommand(instance);
+                    await this.setupCommand(instance);
                 } else {
                     this.setupEvent(instance);
                 }
@@ -106,7 +103,7 @@ export abstract class Bot extends Client {
         }
     }
 
-    private setupCommand(command: Command<Bot>): void {
+    private async setupCommand(command: Command<Bot>): Promise<void> {
         this.#commands.set(command.data.name, command);
         this.#commandsJSON.push(command.data);
 
@@ -114,7 +111,7 @@ export abstract class Bot extends Client {
             this.aliases.set(aliase, command.data.name);
         });
 
-        this.application.commands.set(this.#commandsJSON);
+        // await this.application.commands.set(this.#commandsJSON);
     }
 
     private setupEvent(event: Event<Bot>): void {

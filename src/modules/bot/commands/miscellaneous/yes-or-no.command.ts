@@ -34,7 +34,6 @@ export class YesNoCommand extends Command<AnonimasuBot> {
     }
 
     async action(ctx: CommandContext): Promise<void> {
-        console.log(ctx.options);
         const result = random50() ? 'yes' : 'no';
         const array = toArray(i18n.__(`commands.yes_or_no.responses.${result}`));
         const element = randomElement(array);

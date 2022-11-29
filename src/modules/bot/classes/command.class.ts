@@ -56,7 +56,7 @@ export abstract class Command<T extends Bot> {
         });
     }
 
-    get<E>(
+    getOption<E>(
         ctx: CommandContext,
         name: string,
         defaultValue?: E
